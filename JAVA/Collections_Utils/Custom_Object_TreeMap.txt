@@ -1,0 +1,238 @@
+/*TREEMAP of custom object
+REFERENCE: 
+https://howtodoinjava.com/java/collections/hashmap/design-good-key-for-hashmap/
+https://www.geeksforgeeks.org/how-to-create-a-java-hashmap-of-user-defined-class-type/
+*/
+
+import java.io.*;
+import java.util.*;
+
+
+// Usage of Comparable 
+class Pair
+{
+//private data members
+private int x;
+private int y; 
+    
+// custructor
+public Pair(int x,int y)
+{
+this.x=x;
+this.y=y;
+}
+
+// Basically we are overriding hashCode() from Map interface
+@ Override
+public int hashCode()
+{
+    
+int prime = 11;
+int result = x;
+result = result*prime + y;
+return result;
+
+}
+
+// Basically we are overriding equals() from Map interface
+@Override
+public boolean equals(Object o)
+{
+    if (this == o) 
+    {
+        return true;
+    }
+    if (o == null) 
+    {      
+        return false;
+    }
+    if (this.getClass() != o.getClass()) 
+    {
+        return false;
+    }
+    
+    Pair p_casted = (Pair)o;
+    if(this.x!=p_casted.x)
+    {
+        return false;
+    }
+    if(this.y!=p_casted.y)
+    {
+        return false;
+    }
+    return true;
+}
+//functions to show private data memebers
+public int Getx()
+{
+return this.x;
+}
+
+public int Gety()
+{
+return this.y;
+}
+
+// set private data members
+public int Setx(int x)
+{
+return this.x=x;
+}
+
+public int Gety(int y)
+{
+return this.y=y;
+}
+
+}
+
+class SortingOrder implements Comparator<Pair>
+{
+public int compare(Pair p1,Pair p2)
+{  
+  // asc order of x
+  if(p1.Getx()!=p2.Getx())
+  {
+   if(p1.Getx()>p2.Getx())
+   {
+   return 1;
+   }
+   return -1;
+  }
+  
+    // asc order of y if x is same
+  if(p1.Gety()!=p2.Gety())
+  {
+   if(p1.Gety()>p2.Gety())
+   {
+   return 1;
+   }
+   return -1;
+  }
+  return 0;
+}
+}
+
+class Main {
+	
+// Main Method
+public static void main(String[] args)    
+{  
+
+TreeMap<Pair,Integer> pair_key_map= new TreeMap<Pair,Integer>(new SortingOrder());
+
+Pair p1 = new Pair(2,2);
+Pair p2 = new Pair(0,2);
+Pair p3 = new Pair(0,1);
+
+
+pair_key_map.put(p1,1);
+pair_key_map.put(p2,2);
+pair_key_map.put(p3,3);
+
+
+System.out.println("Map entries initially"); 
+show_map(pair_key_map);
+
+
+    
+System.out.println("updating a value for Pair(0,1) as 4 in map");
+pair_key_map.put(new Pair(0,1),4);
+show_map(pair_key_map); // successfully updated the value in map
+    
+System.out.println("checking the presence of key  Pair(0,1)");
+if(pair_key_map.containsKey(new Pair(0,1)))
+{
+    System.out.println("pair(0,1) present");
+}
+else
+{
+System.out.println("pair(0,1) is not present as key");
+}
+    
+System.out.println("getting value corresponding to  Pair(0,1)");
+System.out.println("pair(0,1) key's value is: " +pair_key_map.get(new Pair(0,1)));
+
+System.out.println("removing key :  Pair(0,1) entry");
+pair_key_map.remove(new Pair(0,1));
+show_map(pair_key_map);
+
+System.out.println("To check if value:3 is mapped to any key");
+if(pair_key_map.containsValue(3))
+{
+System.out.println("value:3 is present");        
+}
+else
+{
+System.out.println("value:3 is not present");  
+}
+
+System.out.println("Keys in map  are:");
+show_keys(pair_key_map);
+    
+System.out.println("Values in map  are:");
+show_values(pair_key_map);
+
+
+    
+
+}
+    
+    public static void show_map(TreeMap<Pair,Integer> m)
+    {
+        Set<Map.Entry<Pair,Integer>> s = new HashSet();
+        s = m.entrySet();
+        if(s.isEmpty())
+        {
+            System.out.println("MAP SIZE IS 0");
+            return;
+        }
+        System.out.println("MAP ENTRIES:");
+        for(Map.Entry<Pair,Integer> it:s)
+        {   Pair p = it.getKey();
+            String key = "("+ p.Getx() + "," + p.Gety() + ")";
+            System.out.println(key + "->" + it.getValue());
+        }
+        System.out.println("*********************************************\n");
+        
+    }
+    
+        public static void show_keys(TreeMap<Pair,Integer> m)
+    {
+        Set<Pair> s = new HashSet();
+        s = m.keySet();
+        if(s.isEmpty())
+        {
+            System.out.println("No keys are present");
+            return;
+        }
+        System.out.println(" KEYS ENTRIES:");
+        for(Pair p:s)
+        {   
+            String key = "("+ p.Getx() + "," + p.Gety() + ")";
+            System.out.println(key);
+        }
+        System.out.println("*********************************************\n");
+        
+    }
+    
+    public static void show_values(TreeMap<Pair,Integer> m)
+    {
+        Collection<Integer> map_values = new ArrayList();
+        // System.out.println(map_values.getClass());
+        map_values = m.values();
+        
+        if(map_values.isEmpty())
+        {
+            System.out.println("No Values are present");
+            return;
+        }
+        System.out.println("Map Values:");
+        for(Integer v:map_values)
+        {   
+            System.out.println(v);
+        }
+        System.out.println("*********************************************\n");
+        
+    }
+}

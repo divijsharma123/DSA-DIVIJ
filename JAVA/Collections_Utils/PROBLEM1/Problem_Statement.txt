@@ -1,0 +1,10 @@
+Given a database random(NOT SORTED BY DATE OF VISIT) records of 
+Customer ('NAME','ADDRESS','VISIT_DATE')
+
+PROBLEM:
+Customer is uniquely identified by combination of ('NAME','ADDRESS'). We want to find Most recent visit date per customer
+
+DataTypes are as follows:
+NAME: String
+ADDRESS: String
+VISIT_DATE: String in format ('yyyymmdd')

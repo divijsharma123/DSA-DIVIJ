@@ -1,0 +1,202 @@
+// Sorting using Comparable or Comparator for a collection 
+// Works in static data Well but is very costly under streaming data
+   : We cannot offord to put the new elemnt a correct position using binary search or again sort are adding eleement at arrayList as the ends
+
+
+
+import java.io.*;
+import java.util.*;
+
+
+// Usage of Comparable 
+class Customer implements Comparable<Customer>
+{
+//private data members
+private String name;
+private String address;
+private String visit_date;
+
+// custructor
+public Customer(String name,String address,String visit_date)
+{
+this.name=name;
+this.address=address;
+this.visit_date=visit_date;
+}
+
+// compareTo func
+public int compareTo(Customer c)
+{
+   
+// sort in asc on basis of names
+if(!(this.name).equals(c.name))
+{
+return (this.name).compareTo(c.name);
+}
+
+// sort in asc on basis of address if names matched
+if(!(this.address).equals(c.address))
+{
+return (this.address).compareTo(c.address);
+}
+
+// sort in desc order of dates
+return -(this.visit_date).compareTo(c.visit_date);
+
+}
+
+public String toString()
+{
+  return "NAME: "+this.name + " ,ADDRESS:" + this.address + " ,VISIT_DATE: " + this.visit_date;
+}
+
+public boolean equals(Object o)
+{
+if(this==o)
+{
+return true;
+}
+
+if(o==null)
+{
+return false;
+}
+
+if(this.getClass() != o.getClass())
+{
+return false;
+}
+
+Customer c = (Customer)o;
+if(!(this.name).equals(c.name))
+{
+return false;
+}
+
+if(!(this.address).equals(c.address))
+{
+return false;
+}
+return true;
+}
+
+}
+
+
+
+
+class Main {
+	
+	// Main Method
+	public static void main(String[] args)    
+	{  
+    
+       // ArrayList Practice
+       ArrayList<Customer> customers_list = new ArrayList<Customer>();
+       Scanner sc = new Scanner(System.in);
+       
+       while(sc.hasNextLine())
+       {
+         String customer_input = sc.nextLine();
+         String[] customer_arr = customer_input.split(" ");
+         String name = customer_arr[0];
+         String address = customer_arr[1];
+         String visit_date = customer_arr[2];
+         customers_list.add(new Customer(name,address,visit_date));
+       }
+       
+       System.out.println("before sorting: \n");
+       show_list(customers_list);
+       
+       System.out.println("after sorting: \n");
+       Collections.sort(customers_list);
+       show_list(customers_list);
+       
+       System.out.println("Customer details according to most recent visit date: \n");
+       show_list(get_recent_customer_details(customers_list));
+       
+
+   
+        
+    }
+    
+    public static void show_list(ArrayList<Customer> cust_list)
+    {
+    System.out.println("Customers list:");
+    for(Customer c:cust_list)
+    {
+    System.out.println(c);
+    }
+    System.out.println("Customers list ends.....\n");
+    }
+    
+    public static ArrayList<Customer> get_recent_customer_details(ArrayList<Customer> cust_list)
+    {
+    if(cust_list.size()==0)
+    {
+     return new ArrayList<Customer>();
+    }
+    if(cust_list.size()==1)
+    {
+    return cust_list;
+    }
+    
+    ArrayList<Customer> out_list = new ArrayList<Customer>();
+    
+    Customer c = cust_list.get(0);
+    out_list.add(c);
+    
+    for(int i=1;i<cust_list.size();i++)
+    {
+    if(c.equals(cust_list.get(i)))
+    {
+    continue;
+    }
+    else
+    {
+      c = cust_list.get(i);
+      out_list.add(c);
+    }
+    }
+    
+    return out_list;
+    }
+}
+
+
+------------------------------------------------------------------------------------------------------
+INPUT:
+C1 ABC 20220101
+C2 ABCD 20220102
+C1 ABC 20220110
+C2 ABC 20220101
+C2 ABCD 20220123
+
+OUTPUT:
+before sorting: 
+
+Customers list:
+NAME: C1 ,ADDRESS:ABC ,VISIT_DATE: 20220101
+NAME: C2 ,ADDRESS:ABCD ,VISIT_DATE: 20220102
+NAME: C1 ,ADDRESS:ABC ,VISIT_DATE: 20220110
+NAME: C2 ,ADDRESS:ABC ,VISIT_DATE: 20220101
+NAME: C2 ,ADDRESS:ABCD ,VISIT_DATE: 20220123
+Customers list ends.....
+
+after sorting: 
+
+Customers list:
+NAME: C1 ,ADDRESS:ABC ,VISIT_DATE: 20220110
+NAME: C1 ,ADDRESS:ABC ,VISIT_DATE: 20220101
+NAME: C2 ,ADDRESS:ABC ,VISIT_DATE: 20220101
+NAME: C2 ,ADDRESS:ABCD ,VISIT_DATE: 20220123
+NAME: C2 ,ADDRESS:ABCD ,VISIT_DATE: 20220102
+Customers list ends.....
+
+Customer details according to most recent visit date: 
+
+Customers list:
+NAME: C1 ,ADDRESS:ABC ,VISIT_DATE: 20220110
+NAME: C2 ,ADDRESS:ABC ,VISIT_DATE: 20220101
+NAME: C2 ,ADDRESS:ABCD ,VISIT_DATE: 20220123
+Customers list ends.....

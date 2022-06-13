@@ -1,0 +1,147 @@
+import java.io.*;
+import java.util.*;
+
+
+// Usage of Comparable 
+class Movie implements Comparable<Movie>
+{
+//private data members
+private double rating;
+private String name;
+private int year;
+
+// custructor
+public Movie(String n,double r,int y)
+{
+this.name=n;
+this.rating=r;
+this.year=y;
+}
+
+// compareTo func
+public int compareTo(Movie m)
+{
+   
+//return this.year - m.year;
+
+// sort in asc on basic of year if years dont match
+if(this.year-m.year!=0)
+{
+return this.year-m.year;
+}
+
+// if years match sort in reverse order of ratings
+if(this.rating-m.rating!=0)
+{
+ if(this.rating > m.rating)
+ {
+ return -1;
+ }
+ return 1;
+}
+
+// sort in desc order of names
+return -(this.name.compareTo(m.name));
+
+
+}
+
+//functions to show private data memebers
+public double GetRating()
+{
+return this.rating;
+}
+
+public String GetName()
+{
+return this.name;
+}
+
+public int GetYear()
+{
+return this.year;
+}
+
+}
+
+// COMPARATOR USAGE
+
+// RatingComapare - on the basis of rating only
+class RatingCompare implements Comparator<Movie>
+{
+public int compare(Movie m1,Movie m2)
+{  // asc order of Rating only 
+   // NOTE: equal in below conditiion and returning 1 (ensure )
+   if(m1.GetRating() >= m2.GetRating())
+   {
+   return 1;
+   }
+   return -1;
+}
+
+}
+
+
+class Main {
+	
+	// Main Method
+	public static void main(String[] args)    
+	{  
+    
+       // ArrayList Practice
+       ArrayList<Movie> movies_list = new ArrayList<Movie>();
+       Scanner sc = new Scanner(System.in);
+       
+       while(sc.hasNextLine())
+       {
+         String movie_inputs = sc.nextLine();
+         //System.out.println(movie_inputs);
+         String[] movie_arr = movie_inputs.split(" ");
+         String movie_nm = movie_arr[0];
+         double movie_rating = Double.valueOf(movie_arr[1]);
+         int movie_yr = Integer.valueOf(movie_arr[2]);
+         //System.out.println(movie_nm + " " + movie_rating + " " + movie_yr);
+         movies_list.add(new Movie(movie_nm,movie_rating,movie_yr));
+       }
+       
+       System.out.println("before sorting: \n");
+       for(int i=0;i<movies_list.size();i++)
+       {
+       Movie m = movies_list.get(i);
+       System.out.println(m.GetName() + " " + m.GetRating() + " " + m.GetYear());
+       }
+       
+       Collections.sort(movies_list);
+       
+       System.out.println("after sorting using Comparable: \n");
+       
+       for(int i=0;i<movies_list.size();i++)
+       {
+       Movie m = movies_list.get(i);
+       System.out.println(m.GetName() + " " + m.GetRating() + " " + m.GetYear());
+       }
+       
+       System.out.println("after sorting using Comparator: \n");
+       // MAKE OBJECT OF RatingCompare and pass to sort func
+       RatingCompare rating_compare = new RatingCompare();
+       Collections.sort(movies_list,rating_compare);
+       
+       for(int i=0;i<movies_list.size();i++)
+       {
+       Movie m = movies_list.get(i);
+       System.out.println(m.GetName() + " " + m.GetRating() + " " + m.GetYear());
+       }      
+        
+        
+    }
+}
+
+-------------------------------------------------------------------------------------------------------------
+
+sample input:
+m1 5 2021
+m2 5 2021
+m3 5 2022
+m4 9 2022
+m5 9.5 2021 
+m6 9 2022

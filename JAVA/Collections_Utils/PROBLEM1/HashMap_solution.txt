@@ -1,0 +1,168 @@
+// Hashmap solution
+// Time complexity = O(N)
+// We can also work with streaming data in case of this solution
+//   : O(1) for addition of new customer in pq and O(no. of distinct customers) to get the desired  output
+
+import java.io.*;
+import java.util.*;
+
+
+
+class Customer
+{
+//private data members
+private String name;
+private String address;
+
+// custructor
+public Customer(String name,String address)
+{
+this.name=name;
+this.address=address;
+}
+
+@Override
+public int hashCode()
+{
+long mod = 1000000007;
+long prime = 11;
+long result = 1;
+
+result = (result*prime + (this.name == null ? 0 : (this.name).hashCode()))%mod;
+result = (result*prime + (this.address == null ? 0 : (this.address).hashCode()))%mod;
+return (int)result;
+}
+    
+@Override
+public boolean equals(Object o)
+{
+if(this==o)
+{
+return true;
+}
+
+if(o==null)
+{
+return false;
+}
+
+if(this.getClass() != o.getClass())
+{
+return false;
+}
+
+Customer c = (Customer)o;
+if(!(this.name).equals(c.name))
+{
+return false;
+}
+
+if(!(this.address).equals(c.address))
+{
+return false;
+}
+return true;
+}
+
+public String getName()
+{
+return this.name;
+}
+   
+public String getAddress()
+{
+return this.address;
+}
+
+@Override
+public String toString()
+{
+  return "NAME: "+this.name + " ,ADDRESS:" + this.address;
+}
+
+
+}
+
+
+class Main {
+	
+	// Main Method
+	public static void main(String[] args)    
+	{  
+    
+       // Custom Priority queue
+       HashMap<Customer,String> customer_mp = new HashMap<Customer,String>();
+    
+       Scanner sc = new Scanner(System.in);
+       System.out.println("Customers:\n");
+       while(sc.hasNextLine())
+       {
+         String customer_input = sc.nextLine();
+         String[] customer_arr = customer_input.split(" ");
+         String name = customer_arr[0];
+         String address = customer_arr[1];
+         String visit_date = customer_arr[2];
+         Customer c = new Customer(name,address);
+         System.out.println(c +  " ,VISIT_DATE: " + visit_date);
+         if(!customer_mp.containsKey(c))
+         {
+             customer_mp.put(c,visit_date);
+         }
+          else
+          {
+              String prev_visit_date = customer_mp.get(c);
+              if(visit_date.compareTo(prev_visit_date)>0)
+              {
+                  customer_mp.put(c,visit_date);
+              }
+          }
+       }
+    
+    // show map
+    System.out.println("Customers according to recency of visit dates:\n");
+    show_map(customer_mp);
+        
+           
+    }
+    
+    public static void show_map(HashMap<Customer,String> customer_mp)
+    {
+        Set<Map.Entry<Customer,String>> s = new HashSet();
+        s = customer_mp.entrySet();
+        if(s.isEmpty())
+        {
+            System.out.println("MAP SIZE IS 0");
+            return;
+        }
+        for(Map.Entry<Customer,String> it:s)
+        {   Customer c = it.getKey();
+            String visit_date = it.getValue();
+            
+            System.out.println(c + " ,VISIT_DATE: " + visit_date);
+        }
+        
+    }
+    
+}
+
+
+------------------------------------------------------------------------------------------------------
+INPUT:
+C1 ABC 20220101
+C2 ABCD 20220102
+C1 ABC 20220110
+C2 ABC 20220101
+C2 ABCD 20220123
+
+Customers:
+
+NAME: C1 ,ADDRESS:ABC ,VISIT_DATE: 20220101
+NAME: C2 ,ADDRESS:ABCD ,VISIT_DATE: 20220102
+NAME: C1 ,ADDRESS:ABC ,VISIT_DATE: 20220110
+NAME: C2 ,ADDRESS:ABC ,VISIT_DATE: 20220101
+NAME: C2 ,ADDRESS:ABCD ,VISIT_DATE: 20220123
+Customers according to recency of visit dates:
+
+NAME: C2 ,ADDRESS:ABC ,VISIT_DATE: 20220101
+NAME: C1 ,ADDRESS:ABC ,VISIT_DATE: 20220110
+NAME: C2 ,ADDRESS:ABCD ,VISIT_DATE: 20220123

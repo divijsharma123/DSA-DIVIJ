@@ -1,0 +1,232 @@
+/*HASHMAP of custom object
+REFERENCE: 
+https://howtodoinjava.com/java/collections/hashmap/design-good-key-for-hashmap/
+https://www.geeksforgeeks.org/how-to-create-a-java-hashmap-of-user-defined-class-type/
+*/
+
+import java.io.*;
+import java.util.*;
+
+
+// Usage of Comparable 
+class Pair
+{
+//private data members
+private int x;
+private int y; 
+    
+// custructor
+public Pair(int x,int y)
+{
+this.x=x;
+this.y=y;
+}
+
+// Basically we are overriding hashCode() from Map interface
+@ Override
+public int hashCode()
+{
+    
+int prime = 11;
+int result = x;
+result = result*prime + y;
+return result;
+
+}
+
+// Basically we are overriding equals() from Map interface
+@Override
+public boolean equals(Object o)
+{
+    if (this == o) 
+    {
+        return true;
+    }
+    if (o == null) 
+    {      
+        return false;
+    }
+    if (this.getClass() != o.getClass()) 
+    {
+        return false;
+    }
+    
+    Pair p_casted = (Pair)o;
+    if(this.x!=p_casted.x)
+    {
+        return false;
+    }
+    if(this.y!=p_casted.y)
+    {
+        return false;
+    }
+    return true;
+}
+//functions to show private data memebers
+public int Getx()
+{
+return this.x;
+}
+
+public int Gety()
+{
+return this.y;
+}
+
+// set private data members
+public int Setx(int x)
+{
+return this.x=x;
+}
+
+public int Gety(int y)
+{
+return this.y=y;
+}
+
+}
+
+class Main {
+	
+// Main Method
+public static void main(String[] args)    
+{  
+
+HashMap<Pair,Integer> pair_key_map= new HashMap<Pair,Integer>();
+
+Pair p1 = new Pair(0,0);
+Pair p2 = new Pair(0,2);
+
+pair_key_map.put(p1,1);
+pair_key_map.put(p2,2);
+
+System.out.println("Map entries initially"); 
+show_map(pair_key_map);
+
+System.out.println("p2 object reference initially:" + p2);  
+System.out.println("p2 CONTENTS: " + p2.Getx() + "," + p2.Gety());
+
+
+System.out.println("hasCode() of p2 before change :" +p2.hashCode());
+
+// value corresponding to p2
+System.out.println("value in map for p2: " +pair_key_map.get(p2));
+
+// changing x value in p2  
+p2.Setx(2); 
+
+System.out.println("Map entries after changing p2"); 
+show_map(pair_key_map); 
+System.out.println("p2 object reference after change:" + p2);
+System.out.println("p2 after changing p2: " + p2.Getx() + "," + p2.Gety());
+
+System.out.println("hasCode() of p2 after changing p2 :" +p2.hashCode());
+
+
+System.out.println("value in map for p2: " +pair_key_map.get(p2));
+
+// So do remember that do not mutate key in map to not show wrong results
+// Though you can mutate any other data member from which hashcode is not calculated
+
+//  clear the map
+pair_key_map.clear();
+show_map(pair_key_map);
+
+pair_key_map.put(new Pair(0,0),1);
+pair_key_map.put(new Pair(0,1),2);
+pair_key_map.put(new Pair(0,2),3);
+
+show_map(pair_key_map);  
+    
+System.out.println("updating a value for Pair(0,1) in map");
+pair_key_map.put(new Pair(0,1),4);
+show_map(pair_key_map); // successfully updated the value in map
+    
+System.out.println("checking the presence of key  Pair(0,1)");
+if(pair_key_map.containsKey(new Pair(0,1)))
+{
+    System.out.println("pair(0,1) present");
+}
+    
+System.out.println("getting value corresponding to  Pair(0,1)");
+System.out.println("pair(0,1) key's value is: " +pair_key_map.get(new Pair(0,1)));
+
+System.out.println("removing key :  Pair(0,1) entry");
+pair_key_map.remove(new Pair(0,1));
+show_map(pair_key_map);
+
+System.out.println("To check if value:3 is mapped to any key");
+if(pair_key_map.containsValue(3))
+{
+System.out.println("value:3 is present");        
+}
+
+System.out.println("Keys in map  are:");
+show_keys(pair_key_map);
+    
+System.out.println("Values in map  are:");
+show_values(pair_key_map);
+
+
+    
+
+}
+    
+    public static void show_map(HashMap<Pair,Integer> m)
+    {
+        Set<Map.Entry<Pair,Integer>> s = new HashSet();
+        s = m.entrySet();
+        if(s.isEmpty())
+        {
+            System.out.println("MAP SIZE IS 0");
+            return;
+        }
+        System.out.println("MAP ENTRIES:");
+        for(Map.Entry<Pair,Integer> it:s)
+        {   Pair p = it.getKey();
+            String key = "("+ p.Getx() + "," + p.Gety() + ")";
+            System.out.println(key + "->" + it.getValue());
+        }
+        System.out.println("*********************************************");
+        
+    }
+    
+        public static void show_keys(HashMap<Pair,Integer> m)
+    {
+        Set<Pair> s = new HashSet();
+        s = m.keySet();
+        if(s.isEmpty())
+        {
+            System.out.println("No keys are present");
+            return;
+        }
+        System.out.println(" KEYS ENTRIES:");
+        for(Pair p:s)
+        {   
+            String key = "("+ p.Getx() + "," + p.Gety() + ")";
+            System.out.println(key);
+        }
+        System.out.println("*********************************************");
+        
+    }
+    
+    public static void show_values(HashMap<Pair,Integer> m)
+    {
+        Collection<Integer> map_values = new ArrayList();
+        // System.out.println(map_values.getClass());
+        map_values = m.values();
+        
+        if(map_values.isEmpty())
+        {
+            System.out.println("No Values are present");
+            return;
+        }
+        System.out.println("Map Values:");
+        for(Integer v:map_values)
+        {   
+            System.out.println(v);
+        }
+        System.out.println("*********************************************");
+        
+    }
+}

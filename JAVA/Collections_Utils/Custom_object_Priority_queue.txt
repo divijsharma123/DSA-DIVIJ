@@ -1,0 +1,148 @@
+/* pq of custom object is implemented by implementing Comparator interface's compare     function by separate class 
+*/
+
+import java.io.*;
+import java.util.*;
+
+
+// Usage of Comparable 
+class Movie 
+{
+//private data members
+private double rating;
+private String name;
+private int year;
+
+// custructor
+public Movie(String n,double r,int y)
+{
+this.name=n;
+this.rating=r;
+this.year=y;
+}
+
+//functions to show private data memebers
+public double GetRating()
+{
+return this.rating;
+}
+
+public String GetName()
+{
+return this.name;
+}
+
+public int GetYear()
+{
+return this.year;
+}
+
+}
+
+// COMPARATOR USAGE
+
+// RatingComapare - on the basis of rating only
+class RatingCompare implements Comparator<Movie>
+{
+public int compare(Movie m1,Movie m2)
+{  
+  
+  // desc order of rating
+  if(m1.GetRating() != m2.GetRating())
+   {
+     if(m1.GetRating() < m2.GetRating())
+     {
+     return 1;
+     }
+     return -1;
+   }
+   
+   // asc order of year
+     if(m1.GetYear() != m2.GetYear())
+   {
+     if(m1.GetYear() > m2.GetYear())
+     {
+     return 1;
+     }
+     return -1;
+   }
+   
+   // asc order of name
+   return (m1.GetName()).compareTo(m2.GetName());
+   
+}
+touch
+}
+
+
+class Main {
+	
+	// Main Method
+	public static void main(String[] args)    
+	{  
+    
+       Scanner sc = new Scanner(System.in);
+       PriorityQueue<Movie> movie_pq = new PriorityQueue(10,new RatingCompare());
+       //System.out.println(movie_pq.size());
+       
+       
+       while(sc.hasNextLine())
+       {
+         String movie_inputs = sc.nextLine();
+         String[] movie_arr = movie_inputs.split(" ");
+         String movie_nm = movie_arr[0];
+         double movie_rating = Double.valueOf(movie_arr[1]);
+         int movie_yr = Integer.valueOf(movie_arr[2]);
+         //System.out.println(movie_nm + " " + movie_rating + " " + movie_yr);
+         movie_pq.add(new Movie(movie_nm,movie_rating,movie_yr));
+       }
+       
+       System.out.println("Actual order in which data was inserted: \n");
+       Iterator<Movie> it = movie_pq.iterator();
+       
+       while(it.hasNext())
+       {
+       Movie m = it.next();
+       System.out.println(m.GetName() + " " + m.GetRating() + " " + m.GetYear());
+       }
+       
+       System.out.println("Actual order after data was inserted: \n");
+      while(!movie_pq.isEmpty())
+       {
+       Movie m = movie_pq.poll();
+       System.out.println(m.GetName() + " " + m.GetRating() + " " + m.GetYear());
+       }  
+             
+        
+    }
+}
+
+
+------------------------------------------------------------------------------------------------------
+
+INPUT:
+m1 5 2021
+m2 5 2021
+m3 5 2022
+m4 9 2022
+m5 9.5 2021 
+m6 9 2022
+
+OUTPUT:
+
+Actual order in which data was inserted: 
+
+m5 9.5 2021
+m4 9.0 2022
+m6 9.0 2022
+m2 5.0 2021
+m1 5.0 2021
+m3 5.0 2022
+Actual order after data was inserted: 
+
+m5 9.5 2021
+m4 9.0 2022
+m6 9.0 2022
+m1 5.0 2021
+m2 5.0 2021
+m3 5.0 2022

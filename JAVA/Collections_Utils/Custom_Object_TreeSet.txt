@@ -1,0 +1,272 @@
+/*TREESET of custom object
+REFERENCE: 
+https://www.programiz.com/java-programming/treeset
+https://www.programiz.com/java-programming/set
+*/
+
+import java.io.*;
+import java.util.*;
+
+
+// Usage of Comparable 
+class Pair
+{
+//private data members
+private int x;
+private int y; 
+    
+// custructor
+public Pair(int x,int y)
+{
+this.x=x;
+this.y=y;
+}
+
+// Basically we are overriding hashCode() from Map interface
+@ Override
+public int hashCode()
+{
+    
+int prime = 11;
+int result = x;
+result = result*prime + y;
+return result;
+
+}
+
+// Basically we are overriding equals() from Map interface
+@Override
+public boolean equals(Object o)
+{
+    if (this == o) 
+    {
+        return true;
+    }
+    if (o == null) 
+    {      
+        return false;
+    }
+    if (this.getClass() != o.getClass()) 
+    {
+        return false;
+    }
+    
+    Pair p_casted = (Pair)o;
+    if(this.x!=p_casted.x)
+    {
+        return false;
+    }
+    if(this.y!=p_casted.y)
+    {
+        return false;
+    }
+    return true;
+}
+    
+//functions to show private data memebers
+public int Getx()
+{
+return this.x;
+}
+
+public int Gety()
+{
+return this.y;
+}
+
+// set private data members
+public int Setx(int x)
+{
+return this.x=x;
+}
+
+public int Gety(int y)
+{
+return this.y=y;
+}
+    
+// Overriding toString() method 
+@Override
+public String toString() {
+    return "("+ this.x + "," + this.y + ")" ;
+}
+
+}
+
+class SortingComaparator implements Comparator<Pair>
+{
+public int compare(Pair p1,Pair p2)
+{  
+  // asc order of x
+  if(p1.Getx()!=p2.Getx())
+  {
+   if(p1.Getx()>p2.Getx())
+   {
+   return 1;
+   }
+   return -1;
+  }
+  
+    // asc order of y if x is same
+  if(p1.Gety()!=p2.Gety())
+  {
+   if(p1.Gety()>p2.Gety())
+   {
+   return 1;
+   }
+   return -1;
+  }
+  return 0;
+}
+}
+
+class Main {
+	
+// Main Method
+public static void main(String[] args)    
+{  
+
+TreeSet<Pair> pair_set = new TreeSet<Pair>(new SortingComaparator());
+
+Pair p1 = new Pair(2,2);
+Pair p2 = new Pair(0,2);
+Pair p3 = new Pair(0,1);
+
+// adding elements in set
+pair_set.add(p1);
+pair_set.add(p2);
+pair_set.add(p3);
+
+show_set(pair_set);
+
+// checking element in set
+if(pair_set.contains(new Pair(0,1)))
+{
+    System.out.println(new Pair(0,1)+" :is present in set");
+}
+else
+{
+System.out.println(new Pair(0,1)+" :is not present in set");
+}
+
+// removing element in set
+if(pair_set.remove(new Pair(0,1)))
+{
+    System.out.println(new Pair(0,1)+" :removed from set");
+}
+else
+{
+System.out.println(new Pair(0,1)+" :cannot be removed from set");
+}
+
+show_set(pair_set);
+
+System.out.println("Adding some elements in set");
+// Adding some new entries
+pair_set.add(new Pair(0,1));
+pair_set.add(new Pair(1,1));
+pair_set.add(new Pair(3,1));
+pair_set.add(new Pair(2,3));
+
+show_set(pair_set);
+
+
+// print first and last element of set 
+System.out.println("first element: "+pair_set.first());
+System.out.println("last element: "+pair_set.last() + "\n");
+
+System.out.println("BOUND FUNCTIONS");
+System.out.println("least element greater than or equal to  "+ new Pair(0,2) +" is: " + pair_set.ceiling(new Pair(0,2)));
+System.out.println("element just greater than  "+ new Pair(0,2) +" is: " + pair_set.higher(new Pair(0,2)));
+System.out.println("element just lesser than  "+ new Pair(0,2) +" is: " + pair_set.lower(new Pair(0,2)));
+System.out.println("greatest element less than or equal to  "+ new Pair(0,2) +" is: " + pair_set.floor(new Pair(0,2)));
+
+// here boolean flag means true if include that element
+// headSet Application
+System.out.println("ELEMENTS LESS THAN: " + new Pair(2,2));
+show_set(pair_set.headSet(new Pair(2,2),false));
+System.out.println("ELEMENTS LESS THAN EQUAL TO: " + new Pair(2,2));
+show_set(pair_set.headSet(new Pair(2,2),true));
+
+// tailSet Application
+System.out.println("ELEMENTS GREATER THAN : " + new Pair(2,2));
+show_set(pair_set.tailSet(new Pair(2,2),false));
+System.out.println("ELEMENTS GREATER THAN EQUAL TO: " + new Pair(2,2));
+show_set(pair_set.tailSet(new Pair(2,2),true));
+
+// subSet Application
+System.out.println("ELEMENTS BETWEEN : " + new Pair(0,2) + " AND " + new Pair(3,1));
+show_set(pair_set.subSet(new Pair(0,2),true,new Pair(3,1),true));
+
+// UNION 
+TreeSet<Pair> pair_set1 = new TreeSet<Pair>(new SortingComaparator());
+pair_set1.add(new Pair(0,1));
+pair_set1.add(new Pair(0,2));
+pair_set1.add(new Pair(0,3));
+pair_set1.add(new Pair(0,4));
+pair_set1.add(new Pair(0,5));
+System.out.println("SET1:");
+show_set(pair_set1);
+
+TreeSet<Pair> pair_set2 = new TreeSet<Pair>(new SortingComaparator());
+pair_set2.add(new Pair(0,2));
+pair_set2.add(new Pair(0,3));
+pair_set2.add(new Pair(0,4));
+System.out.println("SET2:");
+show_set(pair_set2);
+
+System.out.println("UNION(SET1,SET2)");
+TreeSet<Pair> pair_set_union = new TreeSet<Pair>(new SortingComaparator());
+pair_set_union = new TreeSet<Pair>(pair_set1);
+pair_set_union.addAll(pair_set2);
+show_set(pair_set_union);
+
+System.out.println("DIFFERENCE(SET1,SET2)");
+TreeSet<Pair> pair_set_diff = new TreeSet<Pair>(new SortingComaparator());
+pair_set_diff = new TreeSet<Pair>(pair_set1);
+pair_set_diff.removeAll(pair_set2);
+show_set(pair_set_diff);
+
+System.out.println("INTERSECTION(SET1,SET2)");
+TreeSet<Pair> pair_set_interect = new TreeSet<Pair>(new SortingComaparator());
+pair_set_interect = new TreeSet<Pair>(pair_set1);
+pair_set_interect.retainAll(pair_set2);
+show_set(pair_set_interect);
+
+
+System.out.println("SUBSET(SET1,SET2)");
+TreeSet<Pair> pair_set_subset = new TreeSet<Pair>(new SortingComaparator());
+pair_set_subset = new TreeSet<Pair>(pair_set1);
+if(pair_set_subset.containsAll(pair_set2))
+{
+System.out.println("SET2 IS SUBSET OF SET1");
+}
+else
+{
+System.out.println("SET2 IS NOT SUBSET OF SET1");
+}
+
+
+}
+    // SINCE headSet() returns Sortedset so instead of TreeSet
+    public static void show_set(SortedSet<Pair> s)
+    {   
+                
+        if(s.isEmpty())
+        {
+            System.out.println("Set is empty");
+            return;
+        }
+        
+        Iterator<Pair> it = s.iterator();
+        
+        System.out.println("SET ENTRIES:");
+        while(it.hasNext())
+        {   Pair p = it.next();
+            System.out.println(p);
+        }
+        System.out.println("*********************************************\n");
+        
+    }
+ 
+}

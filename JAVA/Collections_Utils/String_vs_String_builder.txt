@@ -1,0 +1,77 @@
+
+import java.io.*;
+import java.util.*;
+
+class Main {git 
+	
+	// Main Method
+	public static void main(String[] args)    
+	{   
+        // *********String*******************
+        String s1 = "hello";
+        String s2 = "hello";
+        System.out.println(s1==s2);
+        // true
+        // bcoze of interning in strings s1 and s2 are pointing to same reference 
+        // as they have the same instance value
+        
+        String s3 = new String("hello");
+        System.out.println(s1==s3);
+        // false
+        // "==" operator compares if the string are pointing to same reference 
+        // but using new , we allocated new memory to s3 though pointing to same character          
+        // array , So instead we will use equals() function
+        
+        System.out.println(s1.equals(s3));
+        // true
+        // it will compare reference then instance afterwards hence returns true
+        
+        System.out.println(s1.charAt(0));
+        // for printing char
+        
+        // no function as setcharAt(i,'char to be changed') as strings are immutable
+        // and s1.charAt(0) = 'c' will return error also
+        
+        System.out.println(s1.length());
+        // printing length
+        
+        s1 += "e";
+        // above operation is not O(1) bcoze new instance with "hello" + "e" will be created
+        // then s1 will point to "helloe" thus O(N) operation 
+        // this is reason string operations are very costly
+        
+        //System.out.println(s1.substring(i,j))
+        // prints string from char at index i till j-1
+        
+        //System.out.println(s1.substring(i))
+        // prints string from char at index i till end
+            
+            
+            
+            
+            
+       // ***************String Builder***********************
+            
+        StringBuilder sb = new StringBuilder("hello");
+        System.out.println(sb.charAt(0));
+        // MUTABLE
+        
+         sb.setCharAt(0,'D'); // changing a position with new char
+         System.out.println(sb);
+        
+         sb.insert(0,'y');  // inserting 
+        System.out.println(sb);
+        
+        sb.deleteCharAt(0); // deleting
+        System.out.println(sb);
+        
+        sb.append("g");  //appending
+        System.out.println(sb);
+        
+        System.out.println(sb.length());
+        
+        
+        
+        
+    }
+}

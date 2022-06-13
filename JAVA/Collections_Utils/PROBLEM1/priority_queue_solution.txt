@@ -1,0 +1,256 @@
+// Priority queue solution
+// Time complexity = O(NLOGN)
+// We can also work with streaming data in case of this solution
+//   : O(LOGN) for addition of new customer in pq and O(N) to get the desired    output
+
+import java.io.*;
+import java.util.*;
+
+
+// Usage of Comparable 
+class Customer
+{
+//private data members
+private String name;
+private String address;
+private String visit_date;
+
+// custructor
+public Customer(String name,String address,String visit_date)
+{
+this.name=name;
+this.address=address;
+this.visit_date=visit_date;
+}
+
+public String toString()
+{
+  return "NAME: "+this.name + " ,ADDRESS:" + this.address + " ,VISIT_DATE: " + this.visit_date;
+}
+
+public boolean equals(Object o)
+{
+if(this==o)
+{
+return true;
+}
+
+if(o==null)
+{
+return false;
+}
+
+if(this.getClass() != o.getClass())
+{
+return false;
+}
+
+Customer c = (Customer)o;
+if(!(this.name).equals(c.name))
+{
+return false;
+}
+
+if(!(this.address).equals(c.address))
+{
+return false;
+}
+return true;
+}
+
+public String getName()
+{
+return this.name;
+}
+
+
+public String getAddress()
+{
+return this.address;
+}
+
+public String visitDate()
+{
+return this.visit_date;
+}
+
+}
+
+class SortingComparator implements Comparator<Customer>
+{
+  public int compare(Customer c1,Customer c2)
+  {
+      // sort in asc on basis of names
+    if(!(c1.getName()).equals(c2.getName()))
+    {
+    return (c1.getName()).compareTo(c2.getName());
+    }
+
+    // sort in asc on basis of address if names matched
+    if(!(c1.getAddress()).equals(c2.getAddress()))
+    {
+    return (c1.getAddress()).compareTo(c2.getAddress());
+    }
+
+    // sort in desc order of dates
+    return -(c1.visitDate()).compareTo(c2.visitDate());
+  }
+}
+
+
+
+
+class Main {
+	
+	// Main Method
+	public static void main(String[] args)    
+	{  
+    
+       // Custom Priority queue
+       PriorityQueue<Customer> customer_pq = new PriorityQueue(10,new SortingComparator());
+       Scanner sc = new Scanner(System.in);
+       
+       while(sc.hasNextLine())
+       {
+         String customer_input = sc.nextLine();
+         String[] customer_arr = customer_input.split(" ");
+         String name = customer_arr[0];
+         String address = customer_arr[1];
+         String visit_date = customer_arr[2];
+         customer_pq.add(new Customer(name,address,visit_date)); 
+       }
+       
+       System.out.println("Insertion order in Customer pq: \n");
+       show_pq_before_sorting(customer_pq);
+       
+       System.out.println("Customer pq after sorting: \n");
+       show_pq_after_sorting(customer_pq);
+       
+       show_list(get_recent_customer_details(customer_pq));
+            
+    }
+    
+    public static void show_pq_before_sorting(PriorityQueue<Customer> customer_pq)
+    {
+       System.out.println("Actual order in which data was inserted: \n");
+       Iterator<Customer> it = customer_pq.iterator();
+       
+       while(it.hasNext())
+       {
+       Customer c = it.next();
+       System.out.println(c);
+       }
+       System.out.println("**************************************** \n");
+    }
+    
+        public static void show_pq_after_sorting(PriorityQueue<Customer> customer_pq)
+    {  
+        PriorityQueue<Customer> customer_pq_temp = new PriorityQueue<Customer>(customer_pq);
+       System.out.println("After Comparator effect on PQ: \n");
+       
+       while(!customer_pq_temp.isEmpty())
+       {
+       Customer c = customer_pq_temp.poll();
+       System.out.println(c);
+       }
+       System.out.println("**************************************** \n");
+    }
+    
+    public static void show_list(ArrayList<Customer> cust_list)
+    {
+    
+    System.out.println("Customers list:");
+    for(Customer c:cust_list)
+    {
+    System.out.println(c);
+    }
+    System.out.println("Customers list ends.....\n");
+    }
+    
+    public static ArrayList<Customer> pq_to_ArrayList(PriorityQueue<Customer> customer_pq)
+    {
+       PriorityQueue<Customer> customer_pq_temp = new PriorityQueue<Customer>(customer_pq);
+        ArrayList<Customer> cust_list = new ArrayList<Customer>();
+       while(!customer_pq_temp.isEmpty())
+       {
+       Customer c = customer_pq_temp.poll();
+       cust_list.add(c);
+       }
+       return cust_list;
+    
+    }
+    
+    public static ArrayList<Customer> get_recent_customer_details(PriorityQueue<Customer> customer_pq)
+    {
+    
+    ArrayList<Customer> cust_list = pq_to_ArrayList(customer_pq);
+    
+    if(cust_list.size()==0)
+    {
+     return new ArrayList<Customer>();
+    }
+    
+    if(cust_list.size()==1)
+    {
+    return cust_list;
+    }
+    
+    ArrayList<Customer> out_list = new ArrayList<Customer>();
+    
+    Customer c = cust_list.get(0);
+    out_list.add(c);
+    
+    for(int i=1;i<cust_list.size();i++)
+    {
+    if(c.equals(cust_list.get(i)))
+    {
+    continue;
+    }
+    else
+    {
+      c = cust_list.get(i);
+      out_list.add(c);
+    }
+    }
+    
+    return out_list;
+    }
+    
+    
+}
+
+------------------------------------------------------------------------------------------------------
+INPUT:
+C1 ABC 20220101
+C2 ABCD 20220102
+C1 ABC 20220110
+C2 ABC 20220101
+C2 ABCD 20220123
+
+Insertion order in Customer pq: 
+
+Actual order in which data was inserted: 
+
+NAME: C1 ,ADDRESS:ABC ,VISIT_DATE: 20220110
+NAME: C2 ,ADDRESS:ABC ,VISIT_DATE: 20220101
+NAME: C1 ,ADDRESS:ABC ,VISIT_DATE: 20220101
+NAME: C2 ,ADDRESS:ABCD ,VISIT_DATE: 20220102
+NAME: C2 ,ADDRESS:ABCD ,VISIT_DATE: 20220123
+**************************************** 
+
+Customer pq after sorting: 
+
+After Comparator effect on PQ: 
+
+NAME: C1 ,ADDRESS:ABC ,VISIT_DATE: 20220110
+NAME: C1 ,ADDRESS:ABC ,VISIT_DATE: 20220101
+NAME: C2 ,ADDRESS:ABC ,VISIT_DATE: 20220101
+NAME: C2 ,ADDRESS:ABCD ,VISIT_DATE: 20220123
+NAME: C2 ,ADDRESS:ABCD ,VISIT_DATE: 20220102
+**************************************** 
+
+Customers list:
+NAME: C1 ,ADDRESS:ABC ,VISIT_DATE: 20220110
+NAME: C2 ,ADDRESS:ABC ,VISIT_DATE: 20220101
+NAME: C2 ,ADDRESS:ABCD ,VISIT_DATE: 20220123
+Customers list ends.....

@@ -1,0 +1,214 @@
+/*HashSet of custom object
+REFERENCE: 
+https://www.programiz.com/java-programming/hashset
+https://www.programiz.com/java-programming/set
+*/
+
+import java.io.*;
+import java.util.*;
+
+
+// Usage of Comparable 
+class Pair
+{
+//private data members
+private int x;
+private int y; 
+    
+// custructor
+public Pair(int x,int y)
+{
+this.x=x;
+this.y=y;
+}
+
+// Basically we are overriding hashCode() from Map interface
+@ Override
+public int hashCode()
+{
+    
+int prime = 11;
+int result = x;
+result = result*prime + y;
+return result;
+
+}
+
+// Basically we are overriding equals() from Map interface
+@Override
+public boolean equals(Object o)
+{
+    if (this == o) 
+    {
+        return true;
+    }
+    if (o == null) 
+    {      
+        return false;
+    }
+    if (this.getClass() != o.getClass()) 
+    {
+        return false;
+    }
+    
+    Pair p_casted = (Pair)o;
+    if(this.x!=p_casted.x)
+    {
+        return false;
+    }
+    if(this.y!=p_casted.y)
+    {
+        return false;
+    }
+    return true;
+}
+    
+//functions to show private data memebers
+public int Getx()
+{
+return this.x;
+}
+
+public int Gety()
+{
+return this.y;
+}
+
+// set private data members
+public int Setx(int x)
+{
+return this.x=x;
+}
+
+public int Gety(int y)
+{
+return this.y=y;
+}
+    
+// Overriding toString() method 
+@Override
+public String toString() {
+    return "("+ this.x + "," + this.y + ")" ;
+}
+
+}
+
+
+class Main {
+	
+// Main Method
+public static void main(String[] args)    
+{  
+
+HashSet<Pair> pair_set = new HashSet<Pair>();
+
+Pair p1 = new Pair(2,2);
+Pair p2 = new Pair(0,2);
+Pair p3 = new Pair(0,1);
+
+// adding elements in set
+pair_set.add(p1);
+pair_set.add(p2);
+pair_set.add(p3);
+
+show_set(pair_set);
+
+// checking element in set
+if(pair_set.contains(new Pair(0,1)))
+{
+    System.out.println(new Pair(0,1)+" :is present in set");
+}
+else
+{
+System.out.println(new Pair(0,1)+" :is not present in set");
+}
+
+// removing element in set
+if(pair_set.remove(new Pair(0,1)))
+{
+    System.out.println(new Pair(0,1)+" :removed from set");
+}
+else
+{
+System.out.println(new Pair(0,1)+" :cannot be removed from set");
+}
+
+show_set(pair_set);
+
+System.out.println("Adding some elements in set");
+// Adding some new entries
+pair_set.add(new Pair(0,1));
+pair_set.add(new Pair(1,1));
+pair_set.add(new Pair(3,1));
+pair_set.add(new Pair(2,3));
+
+show_set(pair_set);
+
+// UNION 
+HashSet<Pair> pair_set1 = new HashSet<Pair>();
+pair_set1.add(new Pair(0,1));
+pair_set1.add(new Pair(0,2));
+pair_set1.add(new Pair(0,3));
+pair_set1.add(new Pair(0,4));
+pair_set1.add(new Pair(0,5));
+System.out.println("SET1:");
+show_set(pair_set1);
+
+HashSet<Pair> pair_set2 = new HashSet<Pair>();
+pair_set2.add(new Pair(0,2));
+pair_set2.add(new Pair(0,3));
+pair_set2.add(new Pair(0,4));
+System.out.println("SET2:");
+show_set(pair_set2);
+
+System.out.println("UNION(SET1,SET2)");
+HashSet<Pair> pair_set_union = new HashSet<Pair>(pair_set1);
+pair_set_union.addAll(pair_set2);
+show_set(pair_set_union);
+
+System.out.println("DIFFERENCE(SET1,SET2)");
+HashSet<Pair> pair_set_diff = new HashSet<Pair>(pair_set1);
+pair_set_diff.removeAll(pair_set2);
+show_set(pair_set_diff);
+
+System.out.println("INTERSECTION(SET1,SET2)");
+HashSet<Pair> pair_set_interect = new HashSet<Pair>(pair_set1);
+pair_set_interect.retainAll(pair_set2);
+show_set(pair_set_interect);
+
+
+System.out.println("SUBSET(SET1,SET2)");
+HashSet<Pair> pair_set_subset = new HashSet<Pair>(pair_set1);
+if(pair_set_subset.containsAll(pair_set2))
+{
+System.out.println("SET2 IS SUBSET OF SET1");
+}
+else
+{
+System.out.println("SET2 IS NOT SUBSET OF SET1");
+}
+
+
+}
+    // SINCE headSet() returns Sortedset so instead of HashSet
+    public static void show_set(HashSet<Pair> s)
+    {   
+                
+        if(s.isEmpty())
+        {
+            System.out.println("Set is empty");
+            return;
+        }
+        
+        Iterator<Pair> it = s.iterator();
+        
+        System.out.println("SET ENTRIES:");
+        while(it.hasNext())
+        {   Pair p = it.next();
+            System.out.println(p);
+        }
+        System.out.println("*********************************************\n");
+        
+    }
+ 
+}
