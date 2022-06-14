@@ -1,6 +1,6 @@
 // Sorting using Comparable or Comparator for a collection 
-// Works in static data Well but is very costly under streaming data
-   : We cannot offord to put the new elemnt a correct position using binary search or again sort are adding eleement at arrayList as the ends
+// Works with static data well but is very costly for streaming data AS
+//  We cannot offord to put the new element at correct position using binary search((O(logN + N))) or again sort after adding new element in arrayList(O(NlogN))
 
 
 

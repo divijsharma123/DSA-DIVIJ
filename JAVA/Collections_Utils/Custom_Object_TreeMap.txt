@@ -236,3 +236,43 @@ show_values(pair_key_map);
         
     }
 }
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+Output:
+Map entries initially
+MAP ENTRIES:
+(0,1)->3
+(0,2)->2
+(2,2)->1
+*********************************************
+
+updating a value for Pair(0,1) as 4 in map
+MAP ENTRIES:
+(0,1)->4
+(0,2)->2
+(2,2)->1
+*********************************************
+
+checking the presence of key  Pair(0,1)
+pair(0,1) present
+getting value corresponding to  Pair(0,1)
+pair(0,1) key's value is: 4
+removing key :  Pair(0,1) entry
+MAP ENTRIES:
+(0,2)->2
+(2,2)->1
+*********************************************
+
+To check if value:3 is mapped to any key
+value:3 is not present
+Keys in map  are:
+ KEYS ENTRIES:
+(0,2)
+(2,2)
+*********************************************
+
+Values in map  are:
+Map Values:
+2
+1
+*********************************************

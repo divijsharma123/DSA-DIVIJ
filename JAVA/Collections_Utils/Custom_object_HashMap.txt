@@ -230,3 +230,58 @@ show_values(pair_key_map);
         
     }
 }
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+Map entries initially
+MAP ENTRIES:
+(0,0)->1
+(0,2)->2
+*********************************************
+p2 object reference initially:Pair@2
+p2 CONTENTS: 0,2
+hasCode() of p2 before change :2
+value in map for p2: 2
+Map entries after changing p2
+MAP ENTRIES:
+(0,0)->1
+(2,2)->2
+*********************************************
+p2 object reference after change:Pair@18
+p2 after changing p2: 2,2
+hasCode() of p2 after changing p2 :24
+value in map for p2: null
+MAP SIZE IS 0
+MAP ENTRIES:
+(0,0)->1
+(0,1)->2
+(0,2)->3
+*********************************************
+updating a value for Pair(0,1) in map
+MAP ENTRIES:
+(0,0)->1
+(0,1)->4
+(0,2)->3
+*********************************************
+checking the presence of key  Pair(0,1)
+pair(0,1) present
+getting value corresponding to  Pair(0,1)
+pair(0,1) key's value is: 4
+removing key :  Pair(0,1) entry
+MAP ENTRIES:
+(0,0)->1
+(0,2)->3
+*********************************************
+To check if value:3 is mapped to any key
+value:3 is present
+Keys in map  are:
+ KEYS ENTRIES:
+(0,0)
+(0,2)
+*********************************************
+Values in map  are:
+Map Values:
+1
+3
+*********************************************

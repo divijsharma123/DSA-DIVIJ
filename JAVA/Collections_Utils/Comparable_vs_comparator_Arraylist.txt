@@ -145,3 +145,29 @@ m3 5 2022
 m4 9 2022
 m5 9.5 2021 
 m6 9 2022
+
+sample output:
+before sorting: 
+
+m1 5.0 2021
+m2 5.0 2021
+m3 5.0 2022
+m4 9.0 2022
+m5 9.5 2021
+m6 9.0 2022
+after sorting using Comparable: 
+
+m5 9.5 2021
+m2 5.0 2021
+m1 5.0 2021
+m6 9.0 2022
+m4 9.0 2022
+m3 5.0 2022
+after sorting using Comparator: 
+
+m2 5.0 2021
+m1 5.0 2021
+m3 5.0 2022
+m6 9.0 2022
+m4 9.0 2022
+m5 9.5 2021

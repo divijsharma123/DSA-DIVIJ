@@ -270,3 +270,114 @@ System.out.println("SET2 IS NOT SUBSET OF SET1");
     }
  
 }
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+Output:
+SET ENTRIES:
+(0,1)
+(0,2)
+(2,2)
+*********************************************
+
+(0,1) :is present in set
+(0,1) :removed from set
+SET ENTRIES:
+(0,2)
+(2,2)
+*********************************************
+
+Adding some elements in set
+SET ENTRIES:
+(0,1)
+(0,2)
+(1,1)
+(2,2)
+(2,3)
+(3,1)
+*********************************************
+
+first element: (0,1)
+last element: (3,1)
+
+BOUND FUNCTIONS
+least element greater than or equal to  (0,2) is: (0,2)
+element just greater than  (0,2) is: (1,1)
+element just lesser than  (0,2) is: (0,1)
+greatest element less than or equal to  (0,2) is: (0,2)
+ELEMENTS LESS THAN: (2,2)
+SET ENTRIES:
+(0,1)
+(0,2)
+(1,1)
+*********************************************
+
+ELEMENTS LESS THAN EQUAL TO: (2,2)
+SET ENTRIES:
+(0,1)
+(0,2)
+(1,1)
+(2,2)
+*********************************************
+
+ELEMENTS GREATER THAN : (2,2)
+SET ENTRIES:
+(2,3)
+(3,1)
+*********************************************
+
+ELEMENTS GREATER THAN EQUAL TO: (2,2)
+SET ENTRIES:
+(2,2)
+(2,3)
+(3,1)
+*********************************************
+
+ELEMENTS BETWEEN : (0,2) AND (3,1)
+SET ENTRIES:
+(0,2)
+(1,1)
+(2,2)
+(2,3)
+(3,1)
+*********************************************
+
+SET1:
+SET ENTRIES:
+(0,1)
+(0,2)
+(0,3)
+(0,4)
+(0,5)
+*********************************************
+
+SET2:
+SET ENTRIES:
+(0,2)
+(0,3)
+(0,4)
+*********************************************
+
+UNION(SET1,SET2)
+SET ENTRIES:
+(0,1)
+(0,2)
+(0,3)
+(0,4)
+(0,5)
+*********************************************
+
+DIFFERENCE(SET1,SET2)
+SET ENTRIES:
+(0,1)
+(0,5)
+*********************************************
+
+INTERSECTION(SET1,SET2)
+SET ENTRIES:
+(0,2)
+(0,3)
+(0,4)
+*********************************************
+
+SUBSET(SET1,SET2)
+SET2 IS SUBSET OF SET1
