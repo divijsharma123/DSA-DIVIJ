@@ -1,0 +1,131 @@
+
+import java.io.*;
+import java.util.*;
+
+class Main {
+	
+    public static void show_arr(int[] arr)
+    {  
+        for(int x:arr)
+        {
+            System.out.print(x + " ");
+        }
+        System.out.println();
+     System.out.println("*************************");
+    }
+  
+    // recusive binary search
+    public static int binary_search_recursive(int[] arr,int l,int r,int e)
+    {
+        if(l>r)
+        {
+            return -1;
+        }
+        int mid = (l + r)/2;
+        if(arr[mid]==e)
+        {
+            return mid;
+        }
+        if(arr[mid]>e)
+        {
+          return binary_search_recursive(arr,l,mid-1,e);  
+        }
+        else
+        {
+            return binary_search_recursive(arr,mid+1,r,e);
+        }
+    }
+    
+    // iterative binary search    
+    public static int binary_search_iterative(int[] arr,int l,int r,int e)
+    {
+        while(l<=r)
+        {
+         int mid = (l + r)/2;
+         if(arr[mid]==e)
+        {
+            return mid;
+        }
+            
+        if(arr[mid]>e)
+        {
+          r = mid-1;
+        }
+        
+        else{
+            l = mid+1;
+        }
+            
+        }
+        return -1;
+        
+    }
+    
+	// Main Method
+	public static void main(String[] args)    
+	{   
+    Scanner sc = new Scanner(System.in);
+       
+
+    String string_input = sc.nextLine();
+    String[] string_arr = string_input.split(" ");
+    int n = string_arr.length;
+    int[] arr = new int[n];
+    for(int i=0;i<n;i++)
+    {
+        arr[i] = Integer.valueOf(string_arr[i]);
+    }
+        
+    System.out.println("input array contents");
+    show_arr(arr);
+    
+    while(sc.hasNext())
+    {
+    int element = sc.nextInt();
+        
+    
+     
+     int recursive_index = binary_search_recursive(arr,0,n-1,element);
+     if(recursive_index!=-1)
+     {
+         System.out.println(element + " found using recursive method at index: " + recursive_index);
+     }
+    else{
+         System.out.println(element + " not found using recursive method");
+    }
+ 
+        
+      
+     int iterative_index = binary_search_iterative(arr,0,n-1,element);
+     if(iterative_index!=-1)
+     {
+         System.out.println(element + " found using iterative method at index: " + iterative_index);
+     }
+    else{
+         System.out.println(element + " not found using iterative method");
+    }
+        
+    }
+        
+        
+    }
+}
+
+------------------------------------------------------------------------------------------------------
+
+INPUT:
+1 3 5 6 7 10
+4
+3
+100
+
+OUTPUT:
+input array contents
+1 3 5 6 7 10 
+*************************
+4 not found using recursive method
+4 not found using iterative method
+3 found using recursive method at index: 1
+3 found using iterative method at index: 1
+100 not found using recursive method
+100 not found using iterative method

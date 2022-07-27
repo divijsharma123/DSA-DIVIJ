@@ -1,0 +1,170 @@
+
+
+// merge sort in asc order for integer array
+// recursively_quick_sort has been implemented with last index as pivot and random index as pivot
+// last index as pivot or fixed index always as pivot can result in O(N^2)
+// Random index as pivot is O(NLOGN)
+
+
+import java.io.*;
+import java.util.*;
+
+class Main {
+    
+    public static int[] arr_smaller = new int[100000];
+    public static int[] arr_bigger = new int[100000];
+
+    public static void show_arr(int[] arr)
+    {  
+        for(int x:arr)
+        {
+            System.out.print(x + " ");
+        }
+        System.out.println();
+     System.out.println("*************************");
+    }
+
+    public static int get_pivot_last_position(int[] arr , int l ,int r)
+    {
+     int pivot_index = r;
+     int pivot = arr[pivot_index];
+     int i=l;
+     int j = r-1;
+
+     while(i<=j)
+     {
+         if(arr[i]<=pivot)
+         {
+             i++;
+         }
+         else{
+             if(arr[j]<=pivot)
+             {
+                 int temp = arr[i];
+                 arr[i] = arr[j];
+                 arr[j] = temp;
+                 i++;
+                 j--;
+             }
+             else{
+                 j--;
+             }
+         }
+     }
+     int pivot_correct_index = i;
+     int temp = arr[pivot_correct_index];
+     arr[pivot_correct_index] = arr[pivot_index];
+     arr[pivot_index] = temp;
+
+     return pivot_correct_index;
+    }
+
+    public static int get_pivot_random_position(int[] arr , int l ,int r)
+    {   // O(2 * N) : Can be improved to O(N) ??
+        
+        Random rand = new Random();
+        // Generate random integer in range [l,r]
+        int pivot_index = rand.nextInt(r-l+1)+l;        
+
+        int pivot = arr[pivot_index];
+        int index_smaller=0;
+        int index_bigger=0;
+        for(int i =l;i<=r;i++)
+        {   if(i==pivot_index)
+            {
+                continue;
+            }
+            if(arr[i]<=pivot)
+            {
+                arr_smaller[index_smaller++] = arr[i];
+            }
+            else{
+                arr_bigger[index_bigger++] = arr[i];
+            }
+        }
+        
+        int i = l;
+        for(int k=0;k<index_smaller;k++)
+        {
+        arr[i++] = arr_smaller[k]; 
+        }
+        arr[i] = pivot;
+        int pivot_correct_position = i;
+        i++;
+        for(int k=0;k<index_bigger;k++)
+        {
+        arr[i++] = arr_bigger[k]; 
+        }
+    
+    return pivot_correct_position;
+    
+    }
+
+    public static void quick_sort_last_index_pivot(int[] arr,int l , int r)
+    {
+        if(l<r)
+        {
+            int pivot_index = get_pivot_last_position(arr, l, r);
+            quick_sort_last_index_pivot(arr, l, pivot_index-1);
+            quick_sort_last_index_pivot(arr, pivot_index+1, r);
+        }
+    }
+
+    public static void quick_sort_random_index_pivot(int[] arr,int l , int r)
+    {
+        if(l<r)
+        {
+            int pivot_index_random = get_pivot_random_position(arr, l, r);
+            quick_sort_random_index_pivot(arr, l, pivot_index_random-1);
+            quick_sort_random_index_pivot(arr, pivot_index_random+1, r);
+        }
+    }
+      
+	// Main Method
+	public static void main(String[] args)    
+	{   
+    Scanner sc = new Scanner(System.in);
+       
+
+    String string_input = sc.nextLine();
+    String[] string_arr = string_input.split(" ");
+    int n = string_arr.length;
+    int[] arr = new int[n];
+    for(int i=0;i<n;i++)
+    {
+        arr[i] = Integer.valueOf(string_arr[i]);
+    }
+
+    System.out.println("input array contents");
+    show_arr(arr);
+
+    int[] arr_last_index_pivot = new int[n];
+    int[] arr_random_index_pivot = new int[n];
+    for(int i=0;i<n;i++)
+    {
+        arr_last_index_pivot[i] = arr[i];
+        arr_random_index_pivot[i] = arr[i];
+    }
+
+    quick_sort_last_index_pivot(arr_last_index_pivot,0,n-1);
+    System.out.println("Quick Sorting after picking last index element as pivot");
+    show_arr(arr_last_index_pivot);
+   
+    quick_sort_random_index_pivot(arr_random_index_pivot,0,n-1);
+    System.out.println("Quick Sorting after picking random index element as pivot");
+    show_arr(arr_random_index_pivot);
+        
+    }
+}
+
+--------------------------------------------------------------------------------------------------
+INPUT:
+3 4 -1 7 0 10 -2
+
+OUTPUT:
+Quick Sorting after picking last index element as pivot
+-2 -1 0 3 4 7 10 
+*************************
+Quick Sorting after picking random index element as pivot
+-2 -1 0 3 4 7 10 
+*************************

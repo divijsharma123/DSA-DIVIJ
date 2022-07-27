@@ -1,0 +1,227 @@
+import java.io.*;
+import java.util.*;
+
+class Employee{
+   private String name;
+   private String position;
+   private Double salary;
+
+   public Employee(String name, String position, Double salary)
+   {
+       this.name = name;
+       this.position = position;
+       this.salary = salary;
+   }
+  
+   public int compareTo(Employee e){
+
+       // asc order of salary
+       if(this.salary > e.salary){
+           return 1;
+       }
+       if(this.salary < e.salary)
+       {
+           return -1;
+       }
+       // asc order of posiion
+       int position_compare_val = (this.position).compareTo(e.position);
+       if(position_compare_val!=0)
+       {
+           return position_compare_val;
+       }
+
+       // asc order of name
+       return (this.name).compareTo(e.name);
+
+   }
+
+   public String toString()
+   {
+     return "( NAME:" + this.name + " ,POSITION:" + this.position + " ,SALARY:" + this.salary + " )";
+   }
+}
+
+
+
+class MyPriorityQueue{
+    private Employee[] heap;
+    private int heap_size;
+
+    public MyPriorityQueue(){
+      heap = new Employee[100000];
+      heap_size = 0;
+    }
+    
+    public void showHeap()
+    {   
+        if(isEmpty())
+        {
+            System.out.println("HEAP IS EMPTY!!");
+            return;
+        }
+        System.out.println("HEAP CONTENTS:");
+        for(int i=0;i<heap_size;i++)
+        {   
+            System.out.println(heap[i]);
+        }
+        System.out.println("***************");
+    }
+
+    public boolean isEmpty()
+    {
+        return heap_size == 0;
+    }
+
+    public int size()
+    {
+        return heap_size;
+    }
+
+    public int parent(int i)
+    {
+        return (i-1)/2;
+    }
+
+    public int leftChild(int i)
+    {
+        return (2*i + 1);
+    }
+
+    public int rightChild(int i)
+    {
+        return (2*i + 2);
+    }
+   
+    // used when we push into the pq in the end
+    public void upHeapify(int i)
+    {
+     while( (i!=0) && ( heap[parent(i)].compareTo(heap[i]) > 0) )
+     {
+         Employee temp = heap[parent(i)];
+         heap[parent(i)] = heap[i];
+         heap[i] = temp;
+         i = parent(i);
+     }
+    }
+
+    // used to balance the heap when we pop from the pq and then insert last elemnt of heap in first position 
+    public void downHeapify(int i)
+    {
+        int left_child_index = leftChild(i);
+        int right_child_index = rightChild(i);
+        
+        // we will find smallest of left and right children , if smallest of those two is smaller then ith elemnt
+        // then we swap smallest and ith elemnts and call downHeapify() again with index as smallest
+        int smallest = i;
+        if( (left_child_index < heap_size) && (heap[i].compareTo(heap[left_child_index])>0) )
+        {
+            smallest = left_child_index;
+        }
+        if( (right_child_index < heap_size) && (heap[smallest].compareTo(heap[right_child_index])>0) )
+        {
+            smallest = right_child_index;
+        }
+
+        if(smallest == i){
+            return;
+        }
+    // swap ith and smallest index elemnts
+        Employee temp = heap[smallest];
+        heap[smallest] = heap[i];
+        heap[i] = temp;
+ 
+        downHeapify(smallest);
+
+    }
+
+    public void push(Employee e)
+    {
+       heap[heap_size] = e;
+       heap_size++;
+
+       upHeapify(heap_size-1);
+
+    }
+   
+    public Employee peek()
+    {
+        if(isEmpty()){
+            System.out.println("HEAP IS EMPTY!!");
+            return null;
+        }
+        return heap[0];
+    }
+
+    public Employee pop()
+    {
+        if(isEmpty()){
+            System.out.println("HEAP IS EMPTY!!");
+            return null;
+        }
+        if(size()==1)
+        {   heap_size=0;
+            return heap[0];
+        }
+       
+        Employee root = heap[0];
+        heap[0] = heap[heap_size-1];
+        heap_size--;
+
+        downHeapify(0);
+        return root;
+    }
+
+
+}
+
+class Main {
+	
+	// Main Method
+	public static void main(String[] args)    
+	{  
+    
+        MyPriorityQueue pq = new MyPriorityQueue();
+        
+        Scanner sc = new Scanner(System.in);
+        
+
+        while(sc.hasNextLine())
+        {
+            String employee_inp = sc.nextLine();
+            String[] employee_arr = employee_inp.split(" ");
+            String name = employee_arr[0];
+            String position = employee_arr[1];
+            Double salary = Double.valueOf(employee_arr[2]);
+            pq.push(new Employee(name, position, salary));
+
+        }
+       
+        sc.close();
+        // SHOW EMPLOYEE IN ORDER OF compareTo()
+
+        while(!pq.isEmpty()){
+            System.out.println(pq.pop());
+        }
+
+     
+        
+    }
+}
+------------------------------------------------------------------------------------------
+
+
+INPUT:
+A SDE1 1500000
+B SDE1 1800000
+A SDE2 2400000
+B SDE3 3000000
+C SDE2 1800000
+D SDE2 1800000
+
+OUTPUT:
+( NAME:A ,POSITION:SDE1 ,SALARY:1500000.0 )
+( NAME:B ,POSITION:SDE1 ,SALARY:1800000.0 )
+( NAME:C ,POSITION:SDE2 ,SALARY:1800000.0 )
+( NAME:D ,POSITION:SDE2 ,SALARY:1800000.0 )
+( NAME:A ,POSITION:SDE2 ,SALARY:2400000.0 )
+( NAME:B ,POSITION:SDE3 ,SALARY:3000000.0 )

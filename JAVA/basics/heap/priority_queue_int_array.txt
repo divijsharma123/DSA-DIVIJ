@@ -1,0 +1,170 @@
+import java.io.*;
+import java.util.*;
+
+
+class MyPriorityQueue{
+    private int[] heap;
+    private int heap_size;
+
+    public MyPriorityQueue(){
+      heap = new int[100000];
+      heap_size = 0;
+    }
+    
+    public void showHeap()
+    {   
+        if(isEmpty())
+        {
+            System.out.println("HEAP IS EMPTY!!");
+            return;
+        }
+        for(int i=0;i<heap_size;i++)
+        {
+            System.out.print(heap[i] + " ");
+        }
+        System.out.println();
+    }
+    public boolean isEmpty()
+    {
+        return heap_size == 0;
+    }
+
+    public int size()
+    {
+        return heap_size;
+    }
+
+    public int parent(int i)
+    {
+        return (i-1)/2;
+    }
+
+    public int leftChild(int i)
+    {
+        return (2*i + 1);
+    }
+
+    public int rightChild(int i)
+    {
+        return (2*i + 2);
+    }
+   
+    // used when we push into the pq in the end
+    public void upHeapify(int i)
+    {
+     while( (i!=0) && (heap[parent(i)] > heap[i]))
+     {
+         int temp = heap[parent(i)];
+         heap[parent(i)] = heap[i];
+         heap[i] = temp;
+         i = parent(i);
+     }
+    }
+
+    // used to balance the heap when we pop from the pq and then insert last elemnt of heap in first position 
+    public void downHeapify(int i)
+    {
+        int left_child_index = leftChild(i);
+        int right_child_index = rightChild(i);
+        
+        // we will find smallest of left and right children , if smallest of those two is smaller then ith elemnt
+        // then we swap smallest and ith elemnts and call downHeapify() again with index as smallest
+        int smallest = i;
+        if( (left_child_index < heap_size) && (heap[i]>heap[left_child_index]))
+        {
+            smallest = left_child_index;
+        }
+        if( (right_child_index < heap_size) && (heap[smallest]>heap[right_child_index]))
+        {
+            smallest = right_child_index;
+        }
+
+        if(smallest == i){
+            return;
+        }
+    // swap ith and smallest index elemnts
+        int temp = heap[smallest];
+        heap[smallest] = heap[i];
+        heap[i] = temp;
+ 
+        downHeapify(smallest);
+
+    }
+
+    public void push(int e)
+    {
+       heap[heap_size] = e;
+       heap_size++;
+
+       upHeapify(heap_size-1);
+
+    }
+   
+    public int peek()
+    {
+        if(isEmpty()){
+            System.out.println("HEAP IS EMPTY!!");
+            return Integer.MAX_VALUE;
+        }
+        return heap[0];
+    }
+    public int pop()
+    {
+        if(isEmpty()){
+            System.out.println("HEAP IS EMPTY!!");
+            return Integer.MAX_VALUE;
+        }
+        if(size()==1)
+        {   heap_size=0;
+            return heap[0];
+        }
+       
+        int root = heap[0];
+        heap[0] = heap[heap_size-1];
+        heap_size--;
+
+        downHeapify(0);
+        return root;
+    }
+
+
+}
+
+class Main {
+	
+	// Main Method
+	public static void main(String[] args)    
+	{  
+    
+        MyPriorityQueue pq = new MyPriorityQueue();
+        pq.push(10);
+        pq.push(1);
+        pq.push(2);
+        System.out.println(pq.peek());
+        pq.showHeap();
+        System.out.println(pq.pop());
+        pq.showHeap();
+        System.out.println(pq.pop());
+        pq.showHeap();
+        System.out.println(pq.pop());
+        pq.showHeap();
+        System.out.println(pq.pop());
+     
+        
+    }
+}
+
+-------------------------------------------------------------------------------------------------
+
+
+Output:
+1
+1 10 2 
+1
+2 10 
+2
+10 
+10
+HEAP IS EMPTY!!
+HEAP IS EMPTY!!
+2147483647

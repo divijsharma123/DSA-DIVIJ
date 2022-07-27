@@ -1,0 +1,171 @@
+// Merge sort for CustomObject whitout using Comparable/Comparator to Sort Using Collections.sort(Object)
+
+// here String is used , which can also be replaced with character array
+
+
+import java.io.*;
+import java.util.*;
+
+class Student{
+    private int rollno;
+    private String name;
+    private int standard;
+
+    Student(int rollno,String name,int standard)
+    {
+        this.rollno = rollno;
+        this.name = name;
+        this.standard = standard;
+    }
+    
+    @Override
+    public String toString()
+    {
+         return "Rollno: " + rollno + " ," + "name: " + name + " ," + "standard: " + standard ;
+    }
+    
+    // custom compareTo()
+    public int compareTo(Student s)
+    {
+        // acs order of roll no
+     if(this.rollno != s.rollno)
+     {
+         if(this.rollno > s.rollno)
+         {
+             return 1;
+         }
+         return -1;
+     }  
+     
+     // acs order of name
+     int x = (this.name).compareTo(s.name);
+
+     if(x!=0)
+     {
+         return x;
+     }
+
+     // asc order of standard
+     return this.standard - s.standard ;
+    }
+    
+}
+
+
+class Main {
+
+    public static Student[] arr = new Student[100000];
+	private static Student[] temp_arr  = new Student[100000];
+
+    public static void show_arr(Student[] arr)
+    {  
+        for(Student s:arr)
+        {   if(s==null)
+            {
+                break;
+            }
+            System.out.println(s);
+        }
+     System.out.println("*************************");
+    }
+
+    public static void merge_sorted_arrays(Student[] arr,int l,int mid,int r)
+    {
+        int i = l;
+        int j = mid+1;
+        int k=l;
+        
+        // insert into temp_arr as merge of halves of arr in asc order
+        while((i<=mid)&&(j<=r))
+        {
+            if( (arr[i].compareTo(arr[j])) < 0)
+            {
+                temp_arr[k++] = arr[i++];
+            }
+            else{
+                temp_arr[k++] = arr[j++];
+            }
+        }
+
+        while(i<=mid)
+        {
+            temp_arr[k++] = arr[i++]; 
+        }
+
+        while(j<=r)
+        {
+            temp_arr[k++] = arr[j++];
+        }
+
+        // insert back data from temp_arr to arr
+        for(int m=l;m<=r;m++)
+        {
+          arr[m] = temp_arr[m];
+        }
+
+    }
+
+    public static void merge_sort(Student[] arr,int l,int r)
+    {
+      if(l<r)
+      {   int mid = (l+r)/2;
+          merge_sort(arr,l,mid);
+          merge_sort(arr, mid+1, r);
+          merge_sorted_arrays(arr,l,mid,r);
+      }
+    }
+      
+	// Main Method
+	public static void main(String[] args)    
+	{   
+    Scanner sc = new Scanner(System.in);
+
+    int i = 0;
+    while(sc.hasNextLine())
+    {
+      String student_inputs = sc.nextLine();
+      //System.out.println(movie_inputs);
+      String[] student_arr = student_inputs.split(" ");
+      int rollno = Integer.valueOf(student_arr[0]);
+      String name = student_arr[1];
+      int standard = Integer.valueOf(student_arr[2]);
+      arr[i++] = new Student(rollno, name, standard);
+    }
+
+
+    System.out.println("input array contents");
+    show_arr(arr);
+
+    merge_sort(arr,0,i-1);
+    
+    System.out.println("AFter Sorting using compareTo():  array elemnts");
+    show_arr(arr);
+        
+        
+    }
+}
+
+------------------------------------------------------------------------------------------
+
+INPUT:
+10 A 12
+12 A 9
+1 B 12
+2 C 5
+1 B 7
+
+OUTPUT:
+input array contents
+Rollno: 10 ,name: A ,standard: 12
+Rollno: 12 ,name: A ,standard: 9
+Rollno: 1 ,name: B ,standard: 12
+Rollno: 2 ,name: C ,standard: 5
+Rollno: 1 ,name: B ,standard: 7
+*************************
+AFter Sorting in ascending order array elements
+Rollno: 1 ,name: B ,standard: 7
+Rollno: 1 ,name: B ,standard: 12
+Rollno: 2 ,name: C ,standard: 5
+Rollno: 10 ,name: A ,standard: 12
+Rollno: 12 ,name: A ,standard: 9
+*************************

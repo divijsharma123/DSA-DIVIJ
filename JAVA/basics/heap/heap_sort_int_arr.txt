@@ -1,0 +1,108 @@
+import java.io.*;
+import java.util.*;
+
+import javax.sound.midi.Synthesizer;
+
+class HeapSort{
+    public HeapSort()
+    {
+
+    }
+
+    public void downHeapify(int[] arr, int i, int n)
+    {
+      int largest = i;
+      int left_child_index = 2*i + 1;
+      int right_child_index = 2*i + 2;
+
+      if( (left_child_index < n) && (arr[largest] < arr[left_child_index]))
+      {
+          largest = left_child_index;
+      }
+      
+      if( (right_child_index < n) && (arr[largest] < arr[right_child_index]))
+      {
+          largest = right_child_index;
+      }
+
+      if(largest==i)
+      {
+          return;
+      }
+
+      int temp = arr[i];
+      arr[i] = arr[largest];
+      arr[largest] = temp;
+
+      downHeapify(arr, largest, n);
+    }
+
+    public void sort(int[] arr)
+    {
+     int n = arr.length;
+     // convert arr to max heap (we can call heapify for first half of elements for it)
+     for(int i=(n/2-1);i>=0;i--)
+     {
+         downHeapify(arr,i,n);
+     }
+
+     
+     // now we will swap each time 0th element with last elemnt to move the 0th(max element) to its correct position
+     // the call heapify with 0th element to move 0TH elemnt to correct position again 
+     for(int i=n-1;i>=0;i--)
+     {
+       int temp = arr[0];
+       arr[0] = arr[i];
+       arr[i] = temp;
+
+       downHeapify(arr,0,i);
+       // heapify called with length i , bcoze left is reduced to i for left elements
+     }
+    }
+}
+class Main {
+
+    public static void show_arr(int[] arr)
+    {   
+        for(int x:arr)
+        {
+            System.out.print(x + " ");
+        }
+        System.out.println();
+    }
+	
+	// Main Method
+	public static void main(String[] args)    
+	{                  
+        Scanner sc = new Scanner(System.in);
+                
+        int n;
+        int[] arr;
+        
+        HeapSort heap_sort = new HeapSort();
+         
+        String[] input_arr = sc.nextLine().split(" ");
+        n = input_arr.length;
+        arr = new int[n];
+        for(int i=0;i<n;i++)
+        {
+         arr[i] = Integer.valueOf(input_arr[i]);
+        }
+        System.out.println("Array elemnts before sorting");
+        show_arr(arr);
+        heap_sort.sort(arr);
+        System.out.println("Array elements after sorting");
+        show_arr(arr);
+        sc.close();        
+    }
+}
+----------------------------------------------------------------------------------------------------
+
+INPUT:
+5 3 2 10 2 4 1 100 -1 -4 1024
+
+OUTPUT:
+Array elemnts before sorting
+5 3 2 10 2 4 1 100 -1 -4 1024 
+Array elements after sorting
+-4 -1 1 2 2 3 4 5 10 100 1024 

@@ -1,0 +1,108 @@
+
+
+// merge sort in asc order for integer array
+
+
+import java.io.*;
+import java.util.*;
+
+class Main {
+	private static int[] temp_arr;
+
+    public static void show_arr(int[] arr)
+    {  
+        for(int x:arr)
+        {
+            System.out.print(x + " ");
+        }
+        System.out.println();
+     System.out.println("*************************");
+    }
+
+    public static void merge_sorted_arrays(int[] arr,int l,int mid,int r)
+    {
+        int i = l;
+        int j = mid+1;
+        int k=l;
+        
+        // insert into temp_arr as merge of halves of arr in asc order
+        while((i<=mid)&&(j<=r))
+        {
+            if(arr[i]<=arr[j])
+            {
+                temp_arr[k++] = arr[i++];
+            }
+            else{
+                temp_arr[k++] = arr[j++];
+            }
+        }
+
+        while(i<=mid)
+        {
+            temp_arr[k++] = arr[i++]; 
+        }
+
+        while(j<=r)
+        {
+            temp_arr[k++] = arr[j++];
+        }
+
+        // insert back data from temp_arr to arr
+        for(int m=l;m<=r;m++)
+        {
+          arr[m] = temp_arr[m];
+        }
+
+    }
+
+    public static void merge_sort(int[] arr,int l,int r)
+    {
+      if(l<r)
+      {   int mid = (l+r)/2;
+          merge_sort(arr,l,mid);
+          merge_sort(arr, mid+1, r);
+          merge_sorted_arrays(arr,l,mid,r);
+      }
+    }
+      
+	// Main Method
+	public static void main(String[] args)    
+	{   
+    Scanner sc = new Scanner(System.in);
+       
+
+    String string_input = sc.nextLine();
+    String[] string_arr = string_input.split(" ");
+    int n = string_arr.length;
+    int[] arr = new int[n];
+    for(int i=0;i<n;i++)
+    {
+        arr[i] = Integer.valueOf(string_arr[i]);
+    }
+
+    temp_arr = new int[n];
+
+    System.out.println("input array contents");
+    show_arr(arr);
+
+    merge_sort(arr,0,n-1);
+    
+    System.out.println("AFter Sorting in ascending order array contents");
+    show_arr(arr);
+       
+    }
+}
+
+
+--------------------------------------------------------------------------------------------------------
+
+INPUT:
+9 1 2 3 34 34 34 34 55 2 1 24 34 35 35
+
+OUTPUT:
+input array contents
+9 1 2 3 34 34 34 34 55 2 1 24 34 35 35 
+*************************
+AFter Sorting in ascending order array contents
+1 1 2 2 3 9 24 34 34 34 34 34 35 35 55 
+*************************
