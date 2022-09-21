@@ -23,7 +23,7 @@ this.y=y;
 }
 
 // Basically we are overriding hashCode() from Map interface
-@ Override
+@Override
 public int hashCode()
 {
     
@@ -86,6 +86,7 @@ return this.y=y;
 
 }
 
+// For TreeSet we need to specify Sorting Order for maintaining keys
 class SortingOrder implements Comparator<Pair>
 {
 public int compare(Pair p1,Pair p2)

@@ -7,8 +7,6 @@ https://www.geeksforgeeks.org/how-to-create-a-java-hashmap-of-user-defined-class
 import java.io.*;
 import java.util.*;
 
-
-// Usage of Comparable 
 class Pair
 {
 //private data members
@@ -23,7 +21,7 @@ this.y=y;
 }
 
 // Basically we are overriding hashCode() from Map interface
-@ Override
+@Override
 public int hashCode()
 {
     
@@ -62,6 +60,7 @@ public boolean equals(Object o)
     }
     return true;
 }
+
 //functions to show private data memebers
 public int Getx()
 {
@@ -142,7 +141,7 @@ System.out.println("updating a value for Pair(0,1) in map");
 pair_key_map.put(new Pair(0,1),4);
 show_map(pair_key_map); // successfully updated the value in map
     
-System.out.println("checking the presence of key  Pair(0,1)");
+System.out.println("checking the presence of key: Pair(0,1)");
 if(pair_key_map.containsKey(new Pair(0,1)))
 {
     System.out.println("pair(0,1) present");

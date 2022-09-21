@@ -1,11 +1,9 @@
-/* pq of custom object is implemented by implementing Comparator interface's compare     function by separate class 
+/* pq of custom object is implemented by implementing Comparator interface's compare  function by separate class 
 */
 
 import java.io.*;
 import java.util.*;
 
-
-// Usage of Comparable 
 class Movie 
 {
 //private data members

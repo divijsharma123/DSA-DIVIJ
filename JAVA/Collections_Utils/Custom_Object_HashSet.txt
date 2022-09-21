@@ -7,8 +7,6 @@ https://www.programiz.com/java-programming/set
 import java.io.*;
 import java.util.*;
 
-
-// Usage of Comparable 
 class Pair
 {
 //private data members
@@ -23,7 +21,7 @@ this.y=y;
 }
 
 // Basically we are overriding hashCode() from Map interface
-@ Override
+@Override
 public int hashCode()
 {
     
@@ -190,7 +188,6 @@ System.out.println("SET2 IS NOT SUBSET OF SET1");
 
 
 }
-    // SINCE headSet() returns Sortedset so instead of HashSet
     public static void show_set(HashSet<Pair> s)
     {   
                 
