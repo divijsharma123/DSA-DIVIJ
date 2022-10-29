@@ -1,0 +1,282 @@
+import java.io.*;
+import java.util.*;
+
+class Employee implements Comparable<Employee>{
+   private String name;
+   private String position;
+   private Double salary;
+
+   public Employee(String name, String position, Double salary)
+   {
+       this.name = name;
+       this.position = position;
+       this.salary = salary;
+   }
+
+  @Override
+   public int compareTo(Employee e){
+
+       // asc order of salary
+       if(this.salary > e.salary){
+           return 1;
+       }
+       if(this.salary < e.salary)
+       {
+           return -1;
+       }
+       // asc order of posiion
+       int position_compare_val = (this.position).compareTo(e.position);
+       if(position_compare_val!=0)
+       {
+           return position_compare_val;
+       }
+
+       // asc order of name
+       return (this.name).compareTo(e.name);
+
+   }
+   
+   @Override
+   public String toString()
+   {
+     return "( NAME:" + this.name + " ,POSITION:" + this.position + " ,SALARY:" + this.salary + " )";
+   }
+}
+
+
+class Student implements Comparable<Student>{
+    private String name;
+    private String standard;
+    private int roll;
+ 
+    public Student(String name, String standard, int roll)
+    {
+        this.name = name;
+        this.standard = standard;
+        this.roll = roll;
+    }
+ 
+   @Override
+    public int compareTo(Student s){
+ 
+        // asc order of salary
+        if(this.roll > s.roll){
+            return 1;
+        }
+        if(this.roll < s.roll)
+        {
+            return -1;
+        }
+        //asc order of standard
+        int standard_compare_val = (this.standard).compareTo(s.standard);
+        if(standard_compare_val !=0)
+        {
+            return standard_compare_val;
+        }
+        // ASC order of name
+        return (this.name).compareTo(s.name);
+ 
+    }
+    
+    @Override
+    public String toString()
+    {
+      return "( NAME:" + this.name + " ,Roll:" + this.roll + " ,Standard:" + this.standard + " )";
+    }
+ }
+
+class MyPriorityQueue<T>{
+    private ArrayList<T> heap;
+    private int heap_size;
+
+    public MyPriorityQueue(){
+ 
+      heap = new ArrayList<T>(100000);
+      heap_size = 0;
+    }
+    
+    public void showHeap()
+    {   
+        if(isEmpty())
+        {
+            System.out.println("HEAP IS EMPTY!!");
+            return;
+        }
+        System.out.println("HEAP CONTENTS:");
+        for(T obj:heap)
+        {
+          System.out.println(obj);
+        }
+        System.out.println("***************");
+    }
+
+    public boolean isEmpty()
+    {
+        return heap_size == 0;
+    }
+
+    public int size()
+    {
+        return heap_size;
+    }
+
+    public int parent(int i)
+    {
+        return (i-1)/2;
+    }
+
+    public int leftChild(int i)
+    {
+        return (2*i + 1);
+    }
+
+    public int rightChild(int i)
+    {
+        return (2*i + 2);
+    }
+
+    public int compare(T obj1,T obj2)
+    {
+        if(obj1==null || obj2==null)
+        {  System.out.println("NULL object(s) detected");
+            return 0;
+        }
+        if(obj1.getClass().getName().equals("Employee"))
+        {
+            Employee e1 = (Employee)obj1;
+            Employee e2 = (Employee)obj2;
+            return e1.compareTo(e2);
+        }
+        else if(obj1.getClass().getName().equals("Student"))
+        {
+            Student e1 = (Student)obj1;
+            Student e2 = (Student)obj2;
+            return e1.compareTo(e2);
+        }
+        else{
+            System.out.println("Class not defined under MyPriorityQueue.compare()");
+            return Integer.MIN_VALUE;
+        }
+    }
+   
+    // used when we push into the pq in the end
+    public void upHeapify(int i)
+    {
+        //compare(heap.get(parent(i)), heap.get(i)) > 0)
+     while( (i!=0) && ( compare(heap.get(parent(i)), heap.get(i)) > 0))
+     {
+         T temp = heap.get(parent(i));
+         heap.set(parent(i),heap.get(i));
+         heap.set(i,temp);
+         i = parent(i);
+     }
+    }
+
+
+    // used to balance the heap when we pop from the pq and then insert last elemnt of heap in first position 
+    public void downHeapify(int i)
+    {
+        int left_child_index = leftChild(i);
+        int right_child_index = rightChild(i);
+        
+        // we will find smallest of left and right children , if smallest of those two is smaller then ith elemnt
+        // then we swap smallest and ith elemnts and call downHeapify() again with index as smallest
+        int smallest = i;
+        
+        if( (left_child_index < heap_size) && (compare(heap.get(smallest), heap.get(left_child_index))>0) )
+        {
+            smallest = left_child_index;
+        }
+        if( (right_child_index < heap_size) && (compare(heap.get(smallest), heap.get(right_child_index))>0) )
+        {
+            smallest = right_child_index;
+        }
+
+        if(smallest == i){
+            return;
+        }
+    // swap ith and smallest index elemnts
+        T temp = heap.get(smallest);
+        heap.set(smallest,heap.get(i));
+        heap.set(i,temp);
+ 
+        downHeapify(smallest);
+
+    }
+
+    public void push(T e)
+    {
+       heap.add(e);
+       heap_size++;
+
+       upHeapify(heap_size-1);
+
+    }
+   
+    public T peek()
+    {
+        if(isEmpty()){
+            System.out.println("HEAP IS EMPTY!!");
+            return null;
+        }
+        return heap.get(0);
+    }
+
+    public T pop()
+    {
+        if(isEmpty()){
+            System.out.println("HEAP IS EMPTY!!");
+            return null;
+        }
+        if(size()==1)
+        {   heap_size=0;
+            return heap.get(0);
+        }
+       
+        T root = heap.get(0);
+        heap.set(0,heap.get(heap_size-1));
+        heap_size--;
+
+        downHeapify(0);
+        return root;
+    }
+
+
+}
+
+class Main {
+	
+	// Main Method
+	public static void main(String[] args)    
+	{  
+    
+        MyPriorityQueue<Employee> pq_employee = new MyPriorityQueue<Employee>();
+
+        pq_employee.push(new Employee("a" ,"SDE2", 12332232323.00));
+        pq_employee.push(new Employee("B" ,"SDE2", 12332123.00));
+        pq_employee.push(new Employee("B" ,"SDE1", 1233212.00));
+        pq_employee.push(new Employee("B" ,"SDE3", 123321223233.00));
+        pq_employee.showHeap();
+    
+
+        while(!pq_employee.isEmpty()){
+            System.out.println(pq_employee.pop());
+        }
+
+        MyPriorityQueue<Student> pq_student = new MyPriorityQueue<Student>();
+
+        pq_student.push(new Student("a" ,"2",1));
+        pq_student.push(new Student("a" ,"1",3));
+        pq_student.push(new Student("b" ,"11",3));
+        pq_student.push(new Student("b" ,"10",3));
+        pq_student.showHeap();
+    
+
+        while(!pq_student.isEmpty()){
+            System.out.println(pq_student.pop());
+        }
+
+     
+        
+    }
+}

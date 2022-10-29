@@ -1,0 +1,137 @@
+// https://leetcode.com/problems/4sum/
+
+/*
+Problem statement:
+
+Given an array nums of n integers, return an array of all the unique quadruplets [nums[a], nums[b], nums[c], nums[d]] such that:
+
+0 <= a, b, c, d < n
+a, b, c, and d are distinct.
+nums[a] + nums[b] + nums[c] + nums[d] == target
+You may return the answer in any order.
+
+ 
+
+Example 1:
+
+Input: nums = [1,0,-1,0,-2,2], target = 0
+Output: [[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
+Example 2:
+
+Input: nums = [2,2,2,2,2], target = 8
+Output: [[2,2,2,2]]
+ 
+
+Constraints:
+
+1 <= nums.length <= 200
+-10^9 <= nums[i] <= 10^9
+-10^9 <= target <= 10^9
+*/
+
+class Solution {
+    
+        public void threeSumEqaulsTarget(int[] nums, int target, int start_index, int quadruples_start_element,  List<List<Integer>> quadruples){ 
+                    
+        // maximum nums[i] posssible in triplet
+        int max_num = (int)Math.floor((double)target/3.0);
+        
+        int i = start_index;
+        int n = nums.length;
+        
+        while(i<n)
+        {   // if starting num of triplet in greater than max_num then no triplets we will get
+            if(nums[i]>max_num)
+            {
+                return;
+            }            
+            
+            // nums[i] < max_num , then there are posibilities of triplets going forward
+            else{
+                // twoSum find for (target-nums[i])
+                int l = i+1;
+                int r = n-1;
+                
+                long target_pair = (long)target-(long)nums[i];
+                while(l<r)
+                {
+                    long sum =  (long)nums[l] + (long)nums[r];
+                    // two Sum pair found
+                    if(sum==(target_pair))
+                    {
+                        List<Integer> quadruple = Arrays.asList(quadruples_start_element,nums[i],nums[l],nums[r]);
+                        quadruples.add(quadruple);
+                    
+                    // for removing duplicacy in terms of same pairs found
+                    while( ((l+1)<r) && (nums[l+1]==nums[l]) )
+                    {
+                        l++;
+                    }
+                    
+                    while( (l<(r-1)) && (nums[r-1]==nums[r]) )
+                    {
+                        r--;
+                    }
+                    l++;
+                    r--;
+                    }
+                    
+                    
+                    else if(sum > (target-nums[i]))
+                    {
+                        r--;
+                    }
+                    
+                    else{
+                        l++;
+                    }                  
+                    
+                }
+                
+                // removing duplicacy of triplets starting with nums[i] again
+                while( (i+1<n) && (nums[i+1]==nums[i]) )
+                {
+                    i++;
+                }
+                
+                // incrementing from last occurance of nums[i]
+                i++;
+            }
+            
+        }
+        return;
+   
+    }
+
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        
+        List<List<Integer>> quadruples = new ArrayList<List<Integer>>();
+        
+        Arrays.sort(nums);
+        int i = 0;
+        int n = nums.length;
+        
+        int max_val_possible = (int)Math.floor((double)target/4.0);
+        
+        while(i<n)
+        {
+            if(nums[i]>max_val_possible)
+            {
+                return quadruples;
+            }
+            
+            else{
+                threeSumEqaulsTarget(nums,(target-nums[i]),i+1,nums[i],quadruples);
+            }
+            while( (i+1<n) && (nums[i+1]==nums[i]))
+            {
+                i++;
+            }
+            i++;
+        }
+        
+        return quadruples;
+        
+        
+    }
+}

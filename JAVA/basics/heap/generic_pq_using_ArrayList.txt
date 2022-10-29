@@ -1,0 +1,352 @@
+import java.io.*;
+import java.util.*;
+
+class Employee implements Comparable<Employee>{
+   private String name;
+   private String position;
+   private Double salary;
+
+   public Employee(String name, String position, Double salary)
+   {
+       this.name = name;
+       this.position = position;
+       this.salary = salary;
+   }
+
+  @Override
+   public int compareTo(Employee e){
+
+       // asc order of salary
+       if(this.salary > e.salary){
+           return 1;
+       }
+       if(this.salary < e.salary)
+       {
+           return -1;
+       }
+       // asc order of posiion
+       int position_compare_val = (this.position).compareTo(e.position);
+       if(position_compare_val!=0)
+       {
+           return position_compare_val;
+       }
+
+       // asc order of name
+       return (this.name).compareTo(e.name);
+
+   }
+   
+   @Override
+   public String toString()
+   {
+     return "( NAME:" + this.name + " ,POSITION:" + this.position + " ,SALARY:" + this.salary + " )";
+   }
+}
+
+
+class Student implements Comparable<Student>{
+    private String name;
+    private String standard;
+    private int roll;
+ 
+    public Student(String name, String standard, int roll)
+    {
+        this.name = name;
+        this.standard = standard;
+        this.roll = roll;
+    }
+ 
+   @Override
+    public int compareTo(Student s){
+ 
+        // asc order of roll
+        if(this.roll > s.roll){
+            return 1;
+        }
+        if(this.roll < s.roll)
+        {
+            return -1;
+        }
+        //asc order of standard
+        int standard_compare_val = (this.standard).compareTo(s.standard);
+        if(standard_compare_val !=0)
+        {
+            return standard_compare_val;
+        }
+        return (this.name).compareTo(s.name);
+ 
+    }
+
+    public int get_roll()
+    {
+        return this.roll;
+    }
+    
+    @Override
+    public String toString()
+    {
+      return "( NAME:" + this.name + " ,Roll:" + this.roll + " ,Standard:" + this.standard + " )";
+    }
+ }
+
+ class Studentcomparator implements Comparator<Student>
+ {
+    @Override
+   public int compare(Student s1,Student s2)
+   {  //System.out.println("comparator called " + s1 + "," + s2);
+
+     if(s1.get_roll() > s2.get_roll()){
+        return 1;
+    }
+    if(s1.get_roll() < s2.get_roll())
+    {
+        return -1;
+    }
+    return 0;
+ 
+   }
+ }
+
+class MyPriorityQueue<T>{
+    private ArrayList<T> heap;
+    private Comparator<T> comparator;
+
+    public MyPriorityQueue(int cap){
+ 
+      heap = new ArrayList<T>(cap);
+    }
+
+    public MyPriorityQueue(int cap,Comparator<T> comparator){
+ 
+        heap = new ArrayList<T>(cap);
+        this.comparator = comparator;
+      }
+
+    
+    public int compare(T obj1, T obj2)
+    {
+        if(comparator == null)
+        {
+            return ((Comparable<T>) obj1).compareTo(obj2);
+        }
+       
+        return comparator.compare(obj1, obj2);
+        
+    }
+    
+    public void showHeap()
+    {   
+        if(isEmpty())
+        {
+            System.out.println("HEAP IS EMPTY!!");
+            return;
+        }
+        System.out.println("HEAP CONTENTS:");
+        
+
+        for(T obj:heap)
+        {
+          System.out.println(obj);
+        }
+        System.out.println("***************");
+    }
+
+    public boolean isEmpty()
+    {
+        return heap.size() == 0;
+    }
+
+    public int size()
+    {
+        return heap.size();
+    }
+
+    public int parent(int i)
+    {
+        return (i-1)/2;
+    }
+
+    public int leftChild(int i)
+    {
+        return (2*i + 1);
+    }
+
+    public int rightChild(int i)
+    {
+        return (2*i + 2);
+    }
+
+    // used when we push into the pq in the end
+    public void upHeapify(int i)
+    {
+        //compare(heap.get(parent(i)), heap.get(i)) > 0)
+     while( (i!=0) && ( compare(heap.get(parent(i)), heap.get(i)) > 0))
+     {
+         T temp = heap.get(parent(i));
+         heap.set(parent(i),heap.get(i));
+         heap.set(i,temp);
+         i = parent(i);
+     }
+    }
+
+
+    // used to balance the heap when we pop from the pq and then insert last elemnt of heap in first position 
+    public void downHeapify(int i)
+    {
+        int left_child_index = leftChild(i);
+        int right_child_index = rightChild(i);
+        
+        // we will find smallest of left and right children , if smallest of those two is smaller then ith elemnt
+        // then we swap smallest and ith elemnts and call downHeapify() again with index as smallest
+        int smallest = i;
+        
+        if( (left_child_index < heap.size()) && (compare(heap.get(smallest), heap.get(left_child_index))>0) )
+        {
+            smallest = left_child_index;
+        }
+        if( (right_child_index < heap.size()) && (compare(heap.get(smallest), heap.get(right_child_index))>0) )
+        {
+            smallest = right_child_index;
+        }
+
+        if(smallest == i){
+            return;
+        }
+    // swap ith and smallest index elemnts
+        T temp = heap.get(smallest);
+        heap.set(smallest,heap.get(i));
+        heap.set(i,temp);
+ 
+        downHeapify(smallest);
+
+    }
+
+    public void push(T e)
+    {
+       heap.add(e);
+
+       upHeapify(heap.size()-1);
+
+    }
+   
+    public T peek()
+    {
+        if(isEmpty()){
+            System.out.println("HEAP IS EMPTY!!");
+            return null;
+        }
+        return heap.get(0);
+    }
+
+    public T pop()
+    {
+        if(isEmpty()){
+            System.out.println("HEAP IS EMPTY!!");
+            return null;
+        }
+        if(size()==1)
+        {   T element = heap.get(0);
+            heap.remove(0);
+            return element;
+        }
+       
+        T root = heap.get(0);
+        heap.set(0,heap.get(heap.size()-1));
+        heap.remove(heap.size()-1);
+
+        downHeapify(0);
+        return root;
+    }
+
+
+}
+
+class Main {
+	
+	// Main Method
+	public static void main(String[] args)    
+	{  
+      System.out.println("pq for Employee using comparable:");
+        MyPriorityQueue<Employee> pq_employee = new MyPriorityQueue<Employee>(10);
+        
+        pq_employee.push(new Employee("B" ,"SDE3", 123321223233.00));
+        pq_employee.push(new Employee("B" ,"SDE2", 12332123.00));
+        pq_employee.push(new Employee("A" ,"SDE2", 12332123.00));
+        pq_employee.push(new Employee("B" ,"SDE1", 1233212.00));
+    
+
+        while(!pq_employee.isEmpty()){
+            System.out.println(pq_employee.pop());
+        }
+        
+        System.out.println("pq for Student using comparable:");
+        MyPriorityQueue<Student> pq_student = new MyPriorityQueue<Student>(10);
+
+        pq_student.push(new Student("a" ,"2",1));
+        pq_student.push(new Student("a" ,"1",3));
+        pq_student.push(new Student("b" ,"11",3));
+        pq_student.push(new Student("b" ,"10",5));
+    
+
+        while(!pq_student.isEmpty()){
+            System.out.println(pq_student.pop());
+        }
+        
+        System.out.println("pq for Integers using comparable");
+        MyPriorityQueue<Integer> pq_int = new MyPriorityQueue<Integer>(10);
+
+        pq_int.push(10);
+        pq_int.push(1);
+        pq_int.push(3);
+        pq_int.push(12);
+    
+
+        while(!pq_int.isEmpty()){
+            System.out.println(pq_int.pop());
+        }
+        
+        System.out.println("pq for Students using Comparator");
+        MyPriorityQueue<Student> pq_student_comparator = new MyPriorityQueue<Student>(10, new Studentcomparator());
+
+        pq_student_comparator.push(new Student("a" ,"2",3));
+        pq_student_comparator.push(new Student("a" ,"1",1));
+        pq_student_comparator.push(new Student("b" ,"11",2));
+        pq_student_comparator.push(new Student("b" ,"9",1));
+        pq_student_comparator.push(new Student("b" ,"10",1));
+        pq_student_comparator.push(new Student("a" ,"11",1));
+    
+
+        while(!pq_student_comparator.isEmpty()){
+            System.out.println(pq_student_comparator.pop());
+        }
+
+     
+        
+    }
+}
+
+----------------------------------------------------------------------------------
+OUTPUT:
+
+pq for Employee using comparable:
+( NAME:B ,POSITION:SDE1 ,SALARY:1233212.0 )
+( NAME:A ,POSITION:SDE2 ,SALARY:1.2332123E7 )
+( NAME:B ,POSITION:SDE2 ,SALARY:1.2332123E7 )
+( NAME:B ,POSITION:SDE3 ,SALARY:1.23321223233E11 )
+pq for Student using comparable:
+( NAME:a ,Roll:1 ,Standard:2 )
+( NAME:a ,Roll:3 ,Standard:1 )
+( NAME:b ,Roll:3 ,Standard:11 )
+( NAME:b ,Roll:5 ,Standard:10 )
+pq for Integers using comparable
+1
+3
+10
+12
+pq for Students using Comparator
+( NAME:a ,Roll:1 ,Standard:1 )
+( NAME:b ,Roll:1 ,Standard:9 )
+( NAME:b ,Roll:1 ,Standard:10 )
+( NAME:a ,Roll:1 ,Standard:11 )
+( NAME:b ,Roll:2 ,Standard:11 )
+( NAME:a ,Roll:3 ,Standard:2 )

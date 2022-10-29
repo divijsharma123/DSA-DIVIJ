@@ -1,0 +1,89 @@
+// LINK : https://leetcode.com/problems/longest-substring-without-repeating-characters/
+
+/* 
+PROBLEM STATEMENT:
+Given a string s, find the length of the longest substring without repeating characters.
+
+ 
+
+Example 1:
+
+Input: s = "abcabcbb"
+Output: 3
+Explanation: The answer is "abc", with the length of 3.
+Example 2:
+
+Input: s = "bbbbb"
+Output: 1
+Explanation: The answer is "b", with the length of 1.
+Example 3:
+
+Input: s = "pwwkew"
+Output: 3
+Explanation: The answer is "wke", with the length of 3.
+Notice that the answer must be a substring, "pwke" is a subsequence and not a substring.
+ 
+
+Constraints:
+
+0 <= s.length <= 5 * 10^4
+s consists of English letters, digits, symbols and spaces.
+*/
+
+
+// SOLUTION
+
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        
+        int[] freq_map = new int[256];
+        
+        int i=0;
+        int j=0;
+        int n = s.length();
+        int max_len = 0;
+        
+        while( (i<n) && (j<n) )
+        {
+            int char_pos_j = (int)(s.charAt(j));
+            
+            // we found repetition of char at index j
+            if(freq_map[char_pos_j]==1)
+            {   // We have found a candidate substring
+                int candidate_len = (j-i);
+                if(candidate_len > max_len)
+                {
+                    max_len = candidate_len;
+                }
+                
+                // move i till you find the character index that repeated before jth pos  
+                while( (i!=j) && (i<n) )
+                {
+                    int char_pos_i = (int)(s.charAt(i));
+                    if(char_pos_i == char_pos_j)
+                    {
+                        freq_map[char_pos_i] = 0;
+                        i++;
+                        break;
+                    }
+                    else{
+                        freq_map[char_pos_i] = 0;
+                        i++;
+                    }
+                }
+            }
+            
+            freq_map[char_pos_j]=1;
+            j++;
+            
+        } 
+        // j came out of the while loop , so i and j will point to last possible substring 
+        int final_len = (j-i);
+        if(final_len > max_len)
+        {
+            max_len = final_len;
+        }
+        
+        return max_len;
+    }
+}

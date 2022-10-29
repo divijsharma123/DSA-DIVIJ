@@ -1,0 +1,123 @@
+// https://leetcode.com/problems/3sum-closest/
+
+/* PROBLEM STATEMENT
+Given an integer array nums of length n and an integer target, find three integers in nums such that the sum is closest to target.
+
+Return the sum of the three integers.
+
+You may assume that each input would have exactly one solution.
+
+ 
+
+Example 1:
+
+Input: nums = [-1,2,1,-4], target = 1
+Output: 2
+Explanation: The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
+Example 2:
+
+Input: nums = [0,0,0], target = 1
+Output: 0
+Explanation: The sum that is closest to the target is 0. (0 + 0 + 0 = 0).
+ 
+
+Constraints:
+
+3 <= nums.length <= 1000
+-1000 <= nums[i] <= 1000
+-10^4 <= target <= 10^4
+*/
+
+
+class Solution {
+    public int threeSumClosest(int[] nums, int target) {
+        
+        Arrays.sort(nums);
+
+
+        int max_near_target_sum = Integer.MAX_VALUE;
+        
+        // maximum value nums[i](basically the start of the triplet) with sum near to target posssible in triplet
+        double target_d = target;
+        int max_numsi = (int)Math.floor(target_d/3.0);
+        
+        
+        int i = 0;
+        int n = nums.length;
+        
+        int count_max_numsi = 0;
+        
+        while(i<n)
+        {      
+                // if we have calculated sum of triplets starting with >=max_numsi then no need to consider after it 
+                if(nums[i] >= max_numsi)
+                {
+                    count_max_numsi++;
+                    if(count_max_numsi==2)
+                    {
+                        return max_near_target_sum;
+                    }
+                    
+                }
+            
+                int local_sum_numsi = Integer.MAX_VALUE;
+            
+                // twoSum find near to (target-nums[i])
+                int l = i+1;
+                int r = n-1;
+                
+                while(l<r)
+                {
+                    int sum =  nums[l] + nums[r];
+                    
+                    // two Sum pair found
+                    if(sum==(target-nums[i]))
+                    {
+                     return target;
+                    }
+                    
+                    else if(sum > (target-nums[i]))
+                    {   
+                        int temp_sum_numsi = nums[i] + sum;
+                        if( ( Math.abs(target - temp_sum_numsi) < Math.abs(target - local_sum_numsi) ) )
+                        {
+                            local_sum_numsi = temp_sum_numsi;
+                        }
+                        r--;
+                    }
+                    
+                    else{
+                        int temp_sum_numsi = nums[i] + sum;
+                        if( ( Math.abs(target - temp_sum_numsi) < Math.abs(target - local_sum_numsi) ) )
+                        {
+                            local_sum_numsi = temp_sum_numsi;
+                        }
+                        l++;
+                    }                                     
+
+                }
+            
+            
+                if( ( Math.abs(target - local_sum_numsi) < Math.abs(target - max_near_target_sum) ) )
+                {
+                    max_near_target_sum = local_sum_numsi;
+                }
+            
+                // removing duplicacy of triplets starting with nums[i] again
+                while( (i+1<n) && (nums[i+1]==nums[i]) )
+                {
+                    i++;
+                }
+                
+                // incrementing from last occurence of nums[i]
+                i++;
+                    
+                    
+
+                }
+                
+
+
+        return max_near_target_sum;
+     }
+}
