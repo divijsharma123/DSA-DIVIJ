@@ -1,0 +1,68 @@
+
+/*
+LINK: https://leetcode.com/problems/max-consecutive-ones-ii/
+
+PROBLEM STATEMENT:
+Given a binary array nums, return the maximum number of consecutive 1's in the array if you can flip at most one 0.
+
+ 
+
+Example 1:
+
+Input: nums = [1,0,1,1,0]
+Output: 4
+Explanation: 
+- If we flip the first zero, nums becomes [1,1,1,1,0] and we have 4 consecutive ones.
+- If we flip the second zero, nums becomes [1,0,1,1,1] and we have 3 consecutive ones.
+The max number of consecutive ones is 4.
+Example 2:
+
+Input: nums = [1,0,1,1,0,1]
+Output: 4
+Explanation: 
+- If we flip the first zero, nums becomes [1,1,1,1,0,1] and we have 4 consecutive ones.
+- If we flip the second zero, nums becomes [1,0,1,1,1,1] and we have 4 consecutive ones.
+The max number of consecutive ones is 4.
+ 
+
+Constraints:
+
+1 <= nums.length <= 10^5
+nums[i] is either 0 or 1.
+*/
+
+/*
+Solution: Sliding window
+Time complexity : O(n)
+*/
+
+class Solution {
+    public int findMaxConsecutiveOnes(int[] nums) {
+        
+        int i = 0;
+        int j = 0;
+        int n = nums.length; 
+        int max_consec_0 = 0;
+        
+        while( (i<n) &&(j<n))
+        {
+            if(nums[j]==0)
+            {   j++;
+                int starting_index = j;
+                while( (j<n) && (nums[j]==1) )
+                {
+                    j++;
+                }
+                max_consec_0 = Math.max(max_consec_0 , j-i);
+                i = starting_index;
+            }
+            else{
+                max_consec_0 = Math.max(max_consec_0 , j-i+1);
+                j++;
+            }
+        }
+        
+        return max_consec_0;
+        
+    }
+}
